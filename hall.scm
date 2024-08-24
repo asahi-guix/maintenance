@@ -1,7 +1,7 @@
 (hall-description
   (name "maintenance")
   (prefix "")
-  (version "0.1")
+  (version "0.0.1")
   (author "Asahi Guix")
   (email "")
   (copyright (2024))
