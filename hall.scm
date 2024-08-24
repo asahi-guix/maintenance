@@ -5,11 +5,12 @@
   (author "Asahi Guix")
   (email "")
   (copyright (2024))
-  (synopsis "")
-  (description "")
-  (home-page "")
+  (synopsis "Asahi Guix Maintenance")
+  (description "Asahi Guix Maintenance")
+  (home-page
+    "https://github.com/asahi-guix/maintenance")
   (license gpl3+)
-  (dependencies `())
+  (dependencies `(("guile-hall" ,guile-hall)))
   (skip ())
   (features
     ((guix #f)
@@ -17,12 +18,19 @@
      (native-language-support #f)
      (licensing #f)))
   (files (libraries
-           ((scheme-file "asahi-guix-maintenance")
-            (directory
-              "asahi-guix-maintenance"
-              ((scheme-file "hconfig")))))
+           ((directory
+              "asahi"
+              ((directory
+                 "guix"
+                 ((directory
+                    "maintenance"
+                    ((directory "packages" ((scheme-file "ci")))
+                     (directory "systems" ((scheme-file "server")))
+                     (directory "machines" ((scheme-file "server")))
+                     (scheme-file "hconfig")))))))))
          (tests ((directory "tests" ())))
-         (programs ((directory "scripts" ())))
+         (programs
+           ((directory "scripts" ((text-file "deploy")))))
          (documentation
            ((org-file "README")
             (symlink "README" "README.org")
@@ -30,8 +38,37 @@
             (text-file "COPYING")
             (directory
               "doc"
-              ((texi-file "asahi-guix-maintenance")))))
+              ((texi-file "version")
+               (text-file "stamp-vti")
+               (text-file ".dirstamp")
+               (org-file "NOTES")
+               (texi-file "asahi-guix-maintenance")
+               (info-file "asahi-guix-maintenance")))))
          (infrastructure
            ((scheme-file "guix")
             (text-file ".gitignore")
-            (scheme-file "hall")))))
+            (scheme-file "hall")
+            (directory
+              ".github"
+              ((directory "workflows" ())))
+            (directory
+              "share"
+              ((directory
+                 "files"
+                 ((directory
+                    "ssh"
+                    ((directory
+                       "authorized-keys"
+                       ((directory
+                          "rsa"
+                          ((unknown-type "roman.pub")
+                           (unknown-type "root.pub")))
+                        (directory
+                          "ed25519"
+                          ((unknown-type "roman.pub")))))))
+                  (directory
+                    "authorized-keys"
+                    ((unknown-type "apple-m1.pub")))))
+               (directory
+                 "patches"
+                 ((unknown-type "cuirass-disable-jit.patch")))))))))
