@@ -1,5 +1,5 @@
 (hall-description
-  (name "asahi-guix-maintenance")
+  (name "maintenance")
   (prefix "")
   (version "0.1")
   (author "Asahi Guix")
