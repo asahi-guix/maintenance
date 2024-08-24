@@ -14,7 +14,7 @@
 
 (package
   (name "asahi-guix-maintenance")
-  (version "0.0.1")
+  (version "0.1")
   (source
     (local-file
       (dirname (current-filename))
@@ -31,7 +31,8 @@
     (list autoconf automake pkg-config texinfo))
   (inputs (list guile-3.0))
   (propagated-inputs (list))
-  (synopsis "Asahi Guix Maintenance")
-  (description "Asahi Guix Maintenance")
-  (home-page "https://github.com/asahi-guix/maintenance")
+  (synopsis "")
+  (description "")
+  (home-page "")
   (license license:gpl3+))
+
