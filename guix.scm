@@ -23,7 +23,15 @@
   (package
     (name "asahi-maintenance")
     (version "0.0.1")
-    (source (local-file "." "checkout" #:recursive? #t #:select? vcs-file?))
+    (source ;; (local-file "." "checkout" #:recursive? #t #:select? vcs-file?)
+     (local-file
+      (dirname (current-filename))
+      #:recursive? #t
+      #:select?
+      (lambda (file stat)
+        (not (any (lambda (my-string)
+                    (string-contains file my-string))
+                  (list ".git" ".dir-locals.el" "guix.scm"))))))
     (build-system gnu-build-system)
     (arguments
      (list
