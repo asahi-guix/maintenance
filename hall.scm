@@ -45,12 +45,21 @@
                (texi-file "asahi-guix-maintenance")
                (info-file "asahi-guix-maintenance")))))
          (infrastructure
-           ((scheme-file "guix")
+           ((directory
+              ".guix"
+              ((directory
+                 "modules"
+                 ((scheme-file "guile-package")))))
             (text-file ".gitignore")
             (scheme-file "hall")
+            (symlink
+              "guix.scm"
+              ".guix/modules/guile-package.scm")
             (directory
               ".github"
-              ((directory "workflows" ())))
+              ((directory
+                 "workflows"
+                 ((unknown-type "test.yml")))))
             (directory
               "share"
               ((directory

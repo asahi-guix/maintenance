@@ -1,0 +1,26 @@
+name: test
+on: [push]
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Guix cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/guix
+          key: guix-cache-${{ github.sha }}
+          restore-keys: |
+            guix-cache-
+      - name: Create Guix config directory
+        run: mkdir -p $HOME/.config/guix
+      - name: Authorize Guix Shell
+        run: echo $(pwd) >> $HOME/.config/guix/shell-authorized-directories
+      - name: Install Guix
+        uses: PromyLOPh/guix-install-action@v1
+        with:
+          pullAfterInstall: false
+      - name: Build package
+        run: guix build -L $PWD/.guix/modules asahi-maintenance
