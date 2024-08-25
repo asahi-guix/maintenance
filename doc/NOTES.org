@@ -306,21 +306,29 @@ Verify builds can be offloaded to the server.
 
 *** Deployment
 
-Deploy the machine in =src/asahi/guix/machine/server.scm= to the server.
+Deploy the machine in =asahi/guix/maintenance/machine/server.scm= to the server.
 
 #+begin_src sh
-  guix deploy src/asahi/guix/machine/server.scm --load-path=src --verbosity=5
+  guix deploy asahi/guix/maintenance/machine/server.scm --load-path=src --verbosity=5
 #+end_src
 
 *** VM
 Run the server in a virtual machine.
 
 #+begin_src sh
-  $(./pre-inst-env guix system vm src/asahi/guix/system/server.scm) \
+  $(./pre-inst-env guix system vm asahi/guix/maintenance/system/server.scm) \
       -m 2048 \
       -smp 4 \
       -nic user,model=virtio-net-pci,hostfwd=tcp::2222-:22
 #+end_src
+*** Reconfigure
+
+Reconfigure the server.
+
+#+begin_src sh
+  guix system reconfigure -L . asahi/guix/maintenance/systems/server.scm
+#+end_src
+
 ** Sound
 *** Diagnose differences betwen Guix and Fedora
 - OS firmware: 12.3 vs 13.5
