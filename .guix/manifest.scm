@@ -13,11 +13,5 @@
     (version %asahi-guix-version)
     (item asahi-guix-server-system)))
 
-;; (concatenate-manifests
-;;  (list (manifest
-;;         (list (specifications->manifest '("hello"))
-;;               ;; %asahi-guix-edge
-;;               ;; %asahi-guix-installer
-;;               ))))
-
-(specifications->manifest '("hello"))
+(concatenate-manifests
+ (list (manifest (list %asahi-guix-server))))
