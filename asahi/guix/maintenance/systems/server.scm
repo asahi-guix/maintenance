@@ -209,7 +209,7 @@ COMMIT
                    (url "https://github.com/asahi-guix/maintenance")
                    (introduction
                     (make-channel-introduction
-                     "d24c8704611908e62f5a389c1b771e6478da8c67"
+                     "c665797c5065cbed81b0c4a9e121baff1f2ffcc0"
                      (openpgp-fingerprint
                       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
            (systems '("aarch64-linux")))
