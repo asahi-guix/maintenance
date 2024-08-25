@@ -9,7 +9,7 @@
 
 (define %asahi-guix-server
   (manifest-entry
-    (name "asahi-guix-base")
+    (name "asahi-guix-server")
     (version %asahi-guix-version)
     (item asahi-guix-server-system)))
 
