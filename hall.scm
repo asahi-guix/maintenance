@@ -52,6 +52,8 @@
                  ((scheme-file "asahi-maintenance-package")))
                (scheme-file "manifest")))
             (text-file ".gitignore")
+            (text-file ".guix-authorizations")
+            (text-file ".guix-channel")
             (scheme-file "hall")
             (symlink
               "guix.scm"
