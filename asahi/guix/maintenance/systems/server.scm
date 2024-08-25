@@ -193,7 +193,7 @@ COMMIT
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-maintenance")
-           (build '(manifests ".guix/manifest.scm"))
+           (build '(manifests "asahi/guix/maintenance/manifest.scm"))
            (channels
             (list (channel
                    (name 'guix)
