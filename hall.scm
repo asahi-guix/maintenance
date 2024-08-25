@@ -27,6 +27,7 @@
                     ((directory "packages" ((scheme-file "ci")))
                      (directory "systems" ((scheme-file "server")))
                      (directory "machines" ((scheme-file "server")))
+                     (scheme-file "manifest")
                      (scheme-file "channels")
                      (scheme-file "hconfig")))))))))
          (tests ((directory "tests" ())))
@@ -46,8 +47,9 @@
                (texi-file "asahi-guix-maintenance")
                (info-file "asahi-guix-maintenance")))))
          (infrastructure
-           ((directory ".guix" ((scheme-file "manifest")))
-            (text-file ".gitignore")
+           ((text-file ".gitignore")
+            (text-file ".guix-authorizations")
+            (text-file ".guix-channel")
             (scheme-file "hall")
             (scheme-file "guix")
             (directory
