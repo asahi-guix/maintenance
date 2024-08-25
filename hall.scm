@@ -47,17 +47,11 @@
          (infrastructure
            ((directory
               ".guix"
-              ((directory
-                 "modules"
-                 ((scheme-file "asahi-maintenance-package")))
+              ((directory "modules" ())
                (scheme-file "manifest")))
             (text-file ".gitignore")
-            (text-file ".guix-authorizations")
-            (text-file ".guix-channel")
             (scheme-file "hall")
-            (symlink
-              "guix.scm"
-              ".guix/modules/asahi-maintenance-package.scm")
+            (scheme-file "guix")
             (directory
               ".github"
               ((directory
