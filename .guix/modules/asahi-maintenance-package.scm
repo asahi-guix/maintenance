@@ -1,4 +1,4 @@
-(define-module (guile-package)
+(define-module (asahi-maintenance-package)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages guile)
