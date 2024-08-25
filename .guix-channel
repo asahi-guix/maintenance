@@ -1,5 +1,4 @@
 ;; -*- mode: scheme; -*-
 (channel
  (version 0)
- (directory ".")
  (url "https://github.com/asahi-guix/maintenance"))
