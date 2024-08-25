@@ -2,7 +2,7 @@
              ;; (asahi guix packages linux)
              ;; (asahi guix systems base)
              ;; (asahi guix systems install)
-             (gnu packages base)
+             (gnu packages)
              (gnu system)
              (guix gexp)
              (guix packages)
@@ -31,7 +31,7 @@
 
 (concatenate-manifests
  (list (manifest
-        (list (package->manifest-entry* "hello")
+        (list (specifications->manifest '("hello"))
               ;; %asahi-guix-edge
               ;; %asahi-guix-installer
               ))))
