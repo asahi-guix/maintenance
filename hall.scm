@@ -49,12 +49,12 @@
               ".guix"
               ((directory
                  "modules"
-                 ((scheme-file "guile-package")))))
+                 ((scheme-file "asahi-maintenance-package")))))
             (text-file ".gitignore")
             (scheme-file "hall")
             (symlink
               "guix.scm"
-              ".guix/modules/guile-package.scm")
+              ".guix/modules/asahi-maintenance-package.scm")
             (directory
               ".github"
               ((directory
