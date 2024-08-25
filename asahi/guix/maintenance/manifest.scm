@@ -16,5 +16,3 @@
 
 (concatenate-manifests
  (list (manifest (list %asahi-guix-server))))
-
-(specifications->manifest '("hello"))
