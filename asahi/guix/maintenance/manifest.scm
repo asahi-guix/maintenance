@@ -1,4 +1,4 @@
-(define-module (asahi guix maintenance channels)
+(define-module (asahi guix maintenance manifest)
   #:use-module (asahi guix maintenance systems server)
   #:use-module (gnu packages)
   #:use-module (gnu system)
