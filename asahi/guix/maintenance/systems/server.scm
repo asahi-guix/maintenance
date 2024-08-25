@@ -403,9 +403,7 @@ COMMIT
                 (authorized-keys
                  (cons* (local-file "../../../../share/files/authorized-keys/apple-m1.pub")
                         (guix-configuration-authorized-keys config)))
-                ;; (channels (cons* %asahi-maintenance
-                ;;                  (guix-configuration-channels config)))
-                ))))
+                (channels (cons %asahi-channel %default-channels))))))
 
 (define %swap-devices
   (list (swap-space (target "/swapfile"))))
