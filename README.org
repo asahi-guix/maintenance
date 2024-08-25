@@ -6,7 +6,7 @@ The docs, notes and code to maintain Asahi Guix.
 
 ** Guix Channel Authentication
 
-Add the following [[https://guix.gnu.org/manual/en/html_node/Channels.html][channel]] to your =~/.config/guix/channels= to
+Add the following [[https://guix.gnu.org/manual/en/html_node/Channels.html][channel]] to your =~/.config/guix/channels= file to
 [[https://guix.gnu.org/manual/en/html_node/Channel-Authentication.html][introduce and authenticate]] the /Asahi Guix Maintenance/ channel.
 
 #+begin_src scheme
