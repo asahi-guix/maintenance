@@ -49,7 +49,8 @@
               ".guix"
               ((directory
                  "modules"
-                 ((scheme-file "asahi-maintenance-package")))))
+                 ((scheme-file "asahi-maintenance-package")))
+               (scheme-file "manifest")))
             (text-file ".gitignore")
             (scheme-file "hall")
             (symlink
