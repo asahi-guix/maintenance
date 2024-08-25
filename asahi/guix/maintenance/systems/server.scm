@@ -1,4 +1,5 @@
 (define-module (asahi guix maintenance systems server)
+  #:use-module (asahi guix maintenance channels)
   #:use-module (asahi guix maintenance packages ci)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu bootloader)
@@ -171,47 +172,14 @@ COMMIT
   #~(list (specification
            (name "asahi-channel")
            (build '(channels asahi))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://github.com/asahi-guix/guix")
-                   (branch "main")
-                   (introduction
-                    (make-channel-introduction
-                     "59c86958338970cac132f45da37de3b00a26a8cc"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))
-                  (channel
-                   (name 'asahi)
-                   (branch "main")
-                   (url "https://github.com/asahi-guix/channel")
-                   (introduction
-                    (make-channel-introduction
-                     "3eeb493b037bea44f225c4314c5556aa25aff36c"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %asahi-guix)
+                           #$(channel->code %asahi-channel)))
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-maintenance")
            (build '(manifests "asahi/guix/maintenance/manifest.scm"))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://git.savannah.gnu.org/git/guix")
-                   (introduction
-                    (make-channel-introduction
-                     "9edb3f66fd807b096b48283debdcddccfea34bad"
-                     (openpgp-fingerprint
-                      "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))
-                  (channel
-                   (name 'asahi)
-                   (branch "main")
-                   (url "https://github.com/asahi-guix/maintenance")
-                   (introduction
-                    (make-channel-introduction
-                     "c665797c5065cbed81b0c4a9e121baff1f2ffcc0"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %gnu-guix)
+                           #$(channel->code %asahi-maintenance)))
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-guix")
@@ -222,16 +190,7 @@ COMMIT
                     "librewolf"
                     "plasma-desktop"
                     "rust"))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://github.com/asahi-guix/guix")
-                   (branch "main")
-                   (introduction
-                    (make-channel-introduction
-                     "59c86958338970cac132f45da37de3b00a26a8cc"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %asahi-guix)))
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-guix-next")
@@ -242,16 +201,7 @@ COMMIT
                     "librewolf"
                     "plasma-desktop"
                     "rust"))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://github.com/asahi-guix/guix")
-                   (branch "next")
-                   (introduction
-                    (make-channel-introduction
-                     "8743e8ba7633769b07e08a26c43d255300e75096"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %asahi-guix-next)))
            (systems '("aarch64-linux")))
           (specification
            (name "guix-core-updates")
@@ -262,85 +212,25 @@ COMMIT
                     "librewolf"
                     "plasma-desktop"
                     "rust"))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://git.savannah.gnu.org/git/guix")
-                   (branch "core-updates")
-                   (introduction
-                    (make-channel-introduction
-                     "9edb3f66fd807b096b48283debdcddccfea34bad"
-                     (openpgp-fingerprint
-                      "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))))
+           (channels (list #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))
           (specification
            (name "r0man-channel")
            (build '(channels r0man-channel))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://github.com/asahi-guix/guix")
-                   (branch "main")
-                   (introduction
-                    (make-channel-introduction
-                     "59c86958338970cac132f45da37de3b00a26a8cc"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))
-                  (channel
-                   (name 'r0man-channel)
-                   (branch "main")
-                   (url "https://github.com/r0man/guix-channel")
-                   (introduction
-                    (make-channel-introduction
-                     "8eb7a76af9b51b80f5c01f18639e6360833fc377"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %asahi-guix)
+                           #$(channel->code %r0man-channel)))
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-images")
            (build '(custom (asahi guix cuirass jobs)))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://git.savannah.gnu.org/git/guix")
-                   (branch "core-updates")
-                   (introduction
-                    (make-channel-introduction
-                     "9edb3f66fd807b096b48283debdcddccfea34bad"
-                     (openpgp-fingerprint
-                      "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))
-                  (channel
-                   (name 'asahi)
-                   (branch "main")
-                   (url "https://github.com/asahi-guix/channel")
-                   (introduction
-                    (make-channel-introduction
-                     "3eeb493b037bea44f225c4314c5556aa25aff36c"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %gnu-guix-core-updates)
+                           #$(channel->code %asahi-channel)))
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-manifest")
            (build '(manifests ".guix/manifest.scm"))
-           (channels
-            (list (channel
-                   (name 'guix)
-                   (url "https://git.savannah.gnu.org/git/guix")
-                   (branch "core-updates")
-                   (introduction
-                    (make-channel-introduction
-                     "9edb3f66fd807b096b48283debdcddccfea34bad"
-                     (openpgp-fingerprint
-                      "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))
-                  (channel
-                   (name 'asahi)
-                   (branch "main")
-                   (url "https://github.com/asahi-guix/channel")
-                   (introduction
-                    (make-channel-introduction
-                     "3eeb493b037bea44f225c4314c5556aa25aff36c"
-                     (openpgp-fingerprint
-                      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+           (channels (list #$(channel->code %gnu-guix-core-updates)
+                           #$(channel->code %asahi-channel)))
            (systems '("aarch64-linux")))))
 
 (define %cuirass-service
@@ -433,24 +323,8 @@ COMMIT
 (define %unattended-upgrade-service
   (service unattended-upgrade-service-type
            (unattended-upgrade-configuration
-            (channels #~(list (channel
-                               (name 'guix)
-                               (url "https://git.savannah.gnu.org/git/guix")
-                               (branch "master")
-                               (introduction
-                                (make-channel-introduction
-                                 "9edb3f66fd807b096b48283debdcddccfea34bad"
-                                 (openpgp-fingerprint
-                                  "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))
-                              (channel
-                               (name 'asahi)
-                               (branch "main")
-                               (url "https://github.com/asahi-guix/channel")
-                               (introduction
-                                (make-channel-introduction
-                                 "3eeb493b037bea44f225c4314c5556aa25aff36c"
-                                 (openpgp-fingerprint
-                                  "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
+            (channels #~(list #$(channel->code %gnu-guix)
+                              #$(channel->code %asahi-channel)))
             (schedule "0 4 * * *")
             (services-to-restart
              '(avahi-daemon
