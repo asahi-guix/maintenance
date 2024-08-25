@@ -37,8 +37,8 @@
 (define-public %asahi-maintenance
   (channel
    (name 'asahi-maintenance)
-   (branch "main")
    (url "https://github.com/asahi-guix/maintenance")
+   (branch "main")
    (introduction
     (make-channel-introduction
      "c665797c5065cbed81b0c4a9e121baff1f2ffcc0"

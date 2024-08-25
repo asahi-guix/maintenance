@@ -12,6 +12,7 @@ The /Asahi Guix Maintenance/ [[https://guix.gnu.org/manual/en/html_node/Channels
   (channel
    (name 'asahi-maintenance)
    (url "https://github.com/asahi-guix/maintenance")
+   (branch "main")
    (introduction
     (make-channel-introduction
      "c665797c5065cbed81b0c4a9e121baff1f2ffcc0"
