@@ -23,4 +23,4 @@ jobs:
         with:
           pullAfterInstall: false
       - name: Build package
-        run: guix build -L $PWD/.guix/modules asahi-maintenance
+        run: guix build -f guix.scm

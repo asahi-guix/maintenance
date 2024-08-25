@@ -23,7 +23,7 @@
   (package
     (name "asahi-maintenance")
     (version "0.0.1")
-    (source (local-file "../.." "checkout" #:recursive? #t #:select? vcs-file?))
+    (source (local-file "." "checkout" #:recursive? #t #:select? vcs-file?))
     (build-system gnu-build-system)
     (arguments
      (list
