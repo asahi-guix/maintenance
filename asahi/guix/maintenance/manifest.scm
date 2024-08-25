@@ -14,5 +14,7 @@
     (version %asahi-guix-version)
     (item asahi-guix-server-system)))
 
-(concatenate-manifests
- (list (manifest (list %asahi-guix-server))))
+;; (concatenate-manifests
+;;  (list (manifest (list %asahi-guix-server))))
+
+(manifest (list %asahi-guix-server))
