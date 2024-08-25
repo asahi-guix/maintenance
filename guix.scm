@@ -1,6 +1,7 @@
 (use-modules
  ((guix licenses) #:prefix license:)
  (gnu packages autotools)
+ (gnu packages gnupg)
  (gnu packages guile)
  (gnu packages guile-xyz)
  (gnu packages package-management)
@@ -33,7 +34,7 @@
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (invoke "hall" "build" "--execute"))))))
     (native-inputs
-     (list autoconf-2.71 automake guile-3.0 guile-hall pkg-config texinfo guix))
+     (list autoconf automake guile-3.0 guile-gcrypt guile-git guile-hall pkg-config texinfo guix))
     (inputs (list guile-3.0))
     (propagated-inputs (list guile-config guile-lib))
     (synopsis "Asahi Guix Maintenance")
