@@ -1,10 +1,9 @@
-(define-module (asahi-maintenance-manifest)
-  #:use-module (asahi guix maintenance systems server)
-  #:use-module (gnu packages)
-  #:use-module (gnu system)
-  #:use-module (guix gexp)
-  #:use-module (guix packages)
-  #:use-module (guix profiles))
+(use-modules (asahi guix maintenance systems server)
+             (gnu packages)
+             (gnu system)
+             (guix gexp)
+             (guix packages)
+             (guix profiles))
 
 (define %asahi-guix-version "0.0.1")
 
