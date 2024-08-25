@@ -324,7 +324,7 @@ COMMIT
   (service unattended-upgrade-service-type
            (unattended-upgrade-configuration
             (channels #~(list #$(channel->code %gnu-guix)
-                              #$(channel->code %asahi-channel)))
+                              #$(channel->code %asahi-maintenance)))
             (schedule "0 4 * * *")
             (services-to-restart
              '(avahi-daemon
@@ -401,7 +401,9 @@ COMMIT
                 (inherit config)
                 (authorized-keys
                  (cons* (local-file "../../../../share/files/authorized-keys/apple-m1.pub")
-                        (guix-configuration-authorized-keys config)))))))
+                        (guix-configuration-authorized-keys config)))
+                (channels (cons* %asahi-maintenance
+                                 (guix-configuration-channels config)))))))
 
 (define %swap-devices
   (list (swap-space (target "/swapfile"))))
