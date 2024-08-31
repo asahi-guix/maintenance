@@ -136,12 +136,12 @@ COMMIT
 (define %openssh-service
   (service openssh-service-type
            (openssh-configuration
-            (authorized-keys
-             `(("root" ,(local-file "../files/ssh/authorized-keys/ed25519/roman.pub"))
-               ("root" ,(local-file "../files/ssh/authorized-keys/rsa/root.pub"))
-               ("root" ,(local-file "../files/ssh/authorized-keys/rsa/roman.pub"))
-               ("roman" ,(local-file "../files/ssh/authorized-keys/ed25519/roman.pub"))
-               ("roman" ,(local-file "../files/ssh/authorized-keys/rsa/roman.pub"))))
+            ;; (authorized-keys
+            ;;  `(("root" ,(local-file "../files/ssh/authorized-keys/ed25519/roman.pub"))
+            ;;    ("root" ,(local-file "../files/ssh/authorized-keys/rsa/root.pub"))
+            ;;    ("root" ,(local-file "../files/ssh/authorized-keys/rsa/roman.pub"))
+            ;;    ("roman" ,(local-file "../files/ssh/authorized-keys/ed25519/roman.pub"))
+            ;;    ("roman" ,(local-file "../files/ssh/authorized-keys/rsa/roman.pub"))))
             (openssh openssh-sans-x)
             (permit-root-login 'prohibit-password)
             (port-number 22))))
@@ -400,9 +400,9 @@ COMMIT
     (guix-service-type
      config => (guix-configuration
                 (inherit config)
-                (authorized-keys
-                 (cons* (local-file "../files/authorized-keys/apple-m1.pub")
-                        (guix-configuration-authorized-keys config)))
+                ;; (authorized-keys
+                ;;  (cons* (local-file "../files/authorized-keys/apple-m1.pub")
+                ;;         (guix-configuration-authorized-keys config)))
                 (channels (cons %asahi-maintenance %default-channels))))))
 
 (define %swap-devices
