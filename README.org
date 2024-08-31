@@ -2,6 +2,8 @@
 
 #+TITLE: Asahi Guix Maintenance
 
+[[https://ci.asahi-guix.org/jobset/asahi-maintenance][https://ci.asahi-guix.org/jobset/asahi-maintenance/badge.svg?type=0]]
+
 The docs, notes and code to maintain Asahi Guix.
 
 ** Channel Introduction
