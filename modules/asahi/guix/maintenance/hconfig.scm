@@ -11,7 +11,7 @@
    init-nls
    init-locale))
 
-(define %version "0.1")
+(define %version "0.1.0")
 
 (define %author "Asahi Guix")
 

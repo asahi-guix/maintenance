@@ -1,7 +1,7 @@
 dnl -*- Autoconf -*-
 
-AC_INIT(asahi-guix-maintenance, 0.1)
-AC_SUBST(HVERSION, "\"0.1\"")
+AC_INIT(asahi-guix-maintenance, 0.1.0)
+AC_SUBST(HVERSION, "\"0.1.0\"")
 AC_SUBST(AUTHOR, "\"r0man\"")
 AC_SUBST(COPYRIGHT, "'(2023)")
 AC_SUBST(LICENSE, gpl3+)
