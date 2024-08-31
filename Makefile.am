@@ -66,12 +66,13 @@ EXTRA_DIST += doc/NOTES.org \
               README.org \
               README \
               COPYING \
-              HACKING \
+              .github/FUNDING.yml \
+              .github/workflows/test.yml \
+              .gitignore \
               .guix-authorizations \
               .guix-channel \
-              .gitignore \
-              .github/workflows/test.yml \
-              .github/FUNDING.yml \
+              .guix/manifest.scm \
+              .guix/modules/asahi-guix-maintenance-package.scm \
               build-aux/test-driver.scm \
               $(TESTS)
 
