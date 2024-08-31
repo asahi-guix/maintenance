@@ -22,14 +22,8 @@
   (or (git-predicate (string-append (current-source-directory) "/../.."))
       (const #t)))
 
-;; (define source-checkout
-;;   (local-file "../.." "asahi-guix-maintenance-checkout"
-;;               #:recursive? #t
-;;               #:select? vcs-file?))
-
 (define source-checkout
-  (local-file (dirname (dirname (current-filename)))
-              "asahi-guix-maintenance-source-checkout"
+  (local-file "../.." "asahi-guix-maintenance-checkout"
               #:recursive? #t
               #:select? vcs-file?))
 
