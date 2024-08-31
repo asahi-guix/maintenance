@@ -19,7 +19,7 @@
                         (string-append (current-source-directory)
                                        "/../.."))
                        (const #t))))
-    (local-file "../.." "shepherd-checkout"
+    (local-file "../.." "asahi-guix-maintenance-checkout"
                 #:recursive? #t
                 #:select? vcs-file?)))
 
