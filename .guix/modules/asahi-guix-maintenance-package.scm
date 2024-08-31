@@ -42,7 +42,7 @@
     (inputs (list guile-3.0))
     ;; (propagated-inputs (list guile-config guile-lib))
     (synopsis "Asahi Guix Maintenance")
-    (description "Asahi Guix Maintenance")
+    (description "The docs, notes and code to maintain Asahi Guix.")
     (home-page "https://github.com/asahi-guix/maintenance")
     (license license:gpl3+)))
 
