@@ -14,14 +14,14 @@
 (define development-packages
   '("autoconf" "automake" "guile-ares-rs" "gettext-minimal" "texinfo" "help2man" "guix"))
 
+(define vcs-file?
+  (or (git-predicate (string-append (current-source-directory) "/../.."))
+      (const #t)))
+
 (define source-checkout
-  (let ((vcs-file? (or (git-predicate
-                        (string-append (current-source-directory)
-                                       "/../.."))
-                       (const #t))))
-    (local-file "../.." "asahi-guix-maintenance-checkout"
-                #:recursive? #t
-                #:select? vcs-file?)))
+  (local-file "../.." "asahi-guix-maintenance-checkout"
+              #:recursive? #t
+              #:select? vcs-file?))
 
 (define-public asahi-guix-maintenance
   (package
