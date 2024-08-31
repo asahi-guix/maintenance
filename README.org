@@ -42,9 +42,8 @@ You may also want to set your directory as an authorized directory for
 #+END_SRC
 
 You can now hack this project's files to your heart's content, whilst
-testing them from your =guix shell= shell.
-
-To try out any scripts in the project you can now use
+testing them from your =guix shell=. To run a script in the project
+use:
 
 #+BEGIN_SRC bash
   ./pre-inst-env scripts/${script-name}
