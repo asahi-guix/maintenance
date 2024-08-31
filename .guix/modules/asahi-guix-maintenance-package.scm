@@ -9,6 +9,8 @@
   #:use-module (guix packages)
   #:use-module (guix utils))
 
+(display "ASAHI-GUIX-MAINTENANCE-PACKAGE")
+
 (define %version "0.1.0")
 
 (define development-packages
