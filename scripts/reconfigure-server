@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -euxo pipefail
+guix system reconfigure -L modules modules/asahi/guix/maintenance/systems/server.scm $*
