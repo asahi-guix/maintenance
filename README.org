@@ -6,7 +6,7 @@ The docs, notes and code to maintain Asahi Guix.
 
 ** Channel Introduction
 
-The /Asahi Guix Maintenance/ [[https://guix.gnu.org/manual/en/html_node/Channels.html][channel]] [[https://guix.gnu.org/manual/en/html_node/Channel-Authentication.html][introduction]].
+The [[https://guix.gnu.org/manual/en/html_node/Channels.html][channel]] [[https://guix.gnu.org/manual/en/html_node/Channel-Authentication.html][introduction]] of the /Asahi Guix Maintenance/ channel.
 
 #+begin_src scheme
   (channel
