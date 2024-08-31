@@ -4,8 +4,6 @@
              ;; (asahi-guix-maintenance-package)
              )
 
-(display "ASAHI-GUIX-MANIFEST\n")
-
 ;; (packages->manifest (list asahi-guix-maintenance))
 
 (packages->manifest (list hello))
