@@ -1,7 +1,11 @@
 (use-modules (guix)
              (guix profiles)
-             (asahi-guix-maintenance-package))
+             (gnu packages base)
+             ;; (asahi-guix-maintenance-package)
+             )
 
 (display "ASAHI-GUIX-MANIFEST\n")
 
-(packages->manifest (list asahi-guix-maintenance))
+;; (packages->manifest (list asahi-guix-maintenance))
+
+(packages->manifest (list hello))
