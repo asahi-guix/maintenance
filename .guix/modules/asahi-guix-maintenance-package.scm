@@ -10,6 +10,7 @@
   #:use-module (guix utils))
 
 (display "ASAHI-GUIX-MAINTENANCE-PACKAGE")
+(format #t "CURRENT SOURCE DIR: ~a" (current-source-directory))
 
 (define %version "0.1.0")
 
