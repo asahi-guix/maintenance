@@ -22,10 +22,8 @@ The [[https://guix.gnu.org/manual/en/html_node/Channels.html][channel]] [[https:
 
 ** Contributing
 
-*** Using GNU/Guix
-
-By far the easiest way to hack on the Asahi Guix Maintenance project
-is to develop with GNU/Guix:
+Checkout the source code and build the project in a =guix shell= with
+GNU Autotools.
 
 #+BEGIN_SRC bash
   # Obtain the source code
@@ -50,20 +48,4 @@ To try out any scripts in the project you can now use
 
 #+BEGIN_SRC bash
   ./pre-inst-env scripts/${script-name}
-#+END_SRC
-
-*** Manual Installation
-
-If you do not yet use Guix, you will have to install this project's
-dependencies manually:
-
-  - autoconf
-  - automake
-  - pkg-config
-  - texinfo
-
-Once those dependencies are installed you can run:
-
-#+BEGIN_SRC bash
-  autoreconf -vif && ./configure && make check
 #+END_SRC
