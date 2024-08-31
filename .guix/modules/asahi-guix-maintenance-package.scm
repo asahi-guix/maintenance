@@ -45,7 +45,7 @@
      ;; Use 'specification->package' to get the latest version of
      ;; the development packages.
      (append (map specification->package development-packages)
-             (list pkg-config guile-next (current-guix))))
+             (list pkg-config guile-next guix)))
     (inputs (list guile-next))
     ;; (propagated-inputs (list guile-config guile-lib))
     (synopsis "Asahi Guix Maintenance")
