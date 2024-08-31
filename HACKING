@@ -12,7 +12,7 @@ By far the easiest way to hack on Asahi Guix Maintenance is to develop using Gui
   cd maintenance
   guix shell -Df guix.scm
   # In the new shell, run:
-  hall build --execute && autoreconf -vif && ./configure && make check
+  autoreconf -vif && ./configure && make check
 #+END_SRC
 
 You may also want to set your directory as an authorized directory for
@@ -31,13 +31,6 @@ To try out any scripts in the project you can now use
   ./pre-inst-env scripts/${script-name}
 #+END_SRC
 
-If you'd like to tidy the project again, but retain the ability to test the
-project from the commandline, simply run:
-
-#+BEGIN_SRC bash
-  ./hall clean --skip "scripts/${script-name},pre-inst-env" --execute
-#+END_SRC
-
 ** Manual Installation
 
 If you do not yet use  Guix, you will have to install this project's
@@ -46,10 +39,9 @@ dependencies manually:
   - automake
   - pkg-config
   - texinfo
-  - guile-hall
 
 Once those dependencies are installed you can run:
 
 #+BEGIN_SRC bash
-  hall build -x && autoreconf -vif && ./configure && make check
+  autoreconf -vif && ./configure && make check
 #+END_SRC
