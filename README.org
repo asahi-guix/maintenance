@@ -19,3 +19,51 @@ The /Asahi Guix Maintenance/ [[https://guix.gnu.org/manual/en/html_node/Channels
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))
 #+end_src
+
+** Contributing
+
+*** Using GNU/Guix
+
+By far the easiest way to hack on the Asahi Guix Maintenance project
+is to develop with GNU/Guix:
+
+#+BEGIN_SRC bash
+  # Obtain the source code
+  git clone https://github.com/asahi-guix/maintenance.git
+  cd maintenance
+  guix shell -Df guix.scm
+  # In the new shell, run:
+  autoreconf -vif && ./configure && make check
+#+END_SRC
+
+You may also want to set your directory as an authorized directory for
+=guix shell= so it works without arguments. To do that, simply run
+
+#+BEGIN_SRC bash
+  echo $(pwd) >> $HOME/.config/guix/shell-authorized-directories
+#+END_SRC
+
+You can now hack this project's files to your heart's content, whilst
+testing them from your =guix shell= shell.
+
+To try out any scripts in the project you can now use
+
+#+BEGIN_SRC bash
+  ./pre-inst-env scripts/${script-name}
+#+END_SRC
+
+*** Manual Installation
+
+If you do not yet use Guix, you will have to install this project's
+dependencies manually:
+
+  - autoconf
+  - automake
+  - pkg-config
+  - texinfo
+
+Once those dependencies are installed you can run:
+
+#+BEGIN_SRC bash
+  autoreconf -vif && ./configure && make check
+#+END_SRC
