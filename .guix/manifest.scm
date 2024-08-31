@@ -5,4 +5,4 @@
 
 ;; (packages->manifest (list asahi-guix-maintenance))
 
-(packages->manifest (list hello))
+(packages->manifest (list asahi-guix-maintenance hello))
