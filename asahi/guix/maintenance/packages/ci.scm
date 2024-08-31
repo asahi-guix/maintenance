@@ -5,7 +5,7 @@
   #:use-module (gnu packages))
 
 (define %disable-jit-patch
-  (local-file "../../../../share/patches/cuirass-disable-jit.patch"))
+  (local-file "../patches/cuirass-disable-jit.patch"))
 
 (define-public cuirass-disable-jit
   (package

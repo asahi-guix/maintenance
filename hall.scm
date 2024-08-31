@@ -24,9 +24,28 @@
                  "guix"
                  ((directory
                     "maintenance"
-                    ((directory "packages" ((scheme-file "ci")))
+                    ((directory
+                       "files"
+                       ((directory
+                          "ssh"
+                          ((directory
+                             "authorized-keys"
+                             ((directory
+                                "rsa"
+                                ((unknown-type "roman.pub")
+                                 (unknown-type "root.pub")))
+                              (directory
+                                "ed25519"
+                                ((unknown-type "roman.pub")))))))
+                        (directory
+                          "authorized-keys"
+                          ((unknown-type "apple-m1.pub")))))
+                     (directory "packages" ((scheme-file "ci")))
                      (directory "systems" ((scheme-file "server")))
                      (directory "machines" ((scheme-file "server")))
+                     (directory
+                       "patches"
+                       ((unknown-type "cuirass-disable-jit.patch")))
                      (scheme-file "manifest")
                      (scheme-file "channels")
                      (scheme-file "hconfig")))))))))
@@ -57,24 +76,4 @@
               ((directory
                  "workflows"
                  ((unknown-type "test.yml")))))
-            (directory
-              "share"
-              ((directory
-                 "files"
-                 ((directory
-                    "ssh"
-                    ((directory
-                       "authorized-keys"
-                       ((directory
-                          "rsa"
-                          ((unknown-type "roman.pub")
-                           (unknown-type "root.pub")))
-                        (directory
-                          "ed25519"
-                          ((unknown-type "roman.pub")))))))
-                  (directory
-                    "authorized-keys"
-                    ((unknown-type "apple-m1.pub")))))
-               (directory
-                 "patches"
-                 ((unknown-type "cuirass-disable-jit.patch")))))))))
+            (directory "share" ())))))
