@@ -1,5 +1,5 @@
 (define-module (asahi guix maintenance manifest)
-  ;; #:use-module (asahi guix maintenance systems server)
+  #:use-module (asahi guix maintenance systems server)
   #:use-module (gnu packages)
   #:use-module (gnu system)
   #:use-module (guix gexp)
@@ -15,9 +15,9 @@
 ;;     (version %asahi-guix-version)
 ;;     (item asahi-guix-server-system)))
 
-;; ;; (concatenate-manifests
-;; ;;  (list (manifest (list %asahi-guix-server))))
+;; (concatenate-manifests
+;;  (list (manifest (list %asahi-guix-server))))
 
 ;; (manifest (list %asahi-guix-server))
 
-(packages->manifest (specifications->packages '("hello")))
+(packages->manifest (specifications->packages '("hello" "coreutils")))
