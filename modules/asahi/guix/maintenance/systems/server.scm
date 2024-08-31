@@ -177,7 +177,7 @@ COMMIT
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-maintenance")
-           (build '(manifests "asahi/guix/maintenance/manifest.scm"))
+           (build '(manifests ".guix/manifest.scm"))
            (channels (list #$(channel->code %gnu-guix)
                            #$(channel->code %asahi-maintenance)))
            (systems '("aarch64-linux")))

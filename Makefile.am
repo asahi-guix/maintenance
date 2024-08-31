@@ -30,32 +30,25 @@ EXTRA_DIST = $(SOURCES) $(NOCOMP_SOURCES)
 GUILE_WARNINGS = -Wunbound-variable -Warity-mismatch -Wformat
 SUFFIXES = .scm .go
 .scm.go:
-	$(AM_V_GEN)$(top_builddir)/pre-inst-env $(GUILE_TOOLS) compile $(GUILE_WARNINGS) -L src -o "$@" "$<"
+	$(AM_V_GEN)$(top_builddir)/pre-inst-env $(GUILE_TOOLS) compile $(GUILE_WARNINGS) -L modules -o "$@" "$<"
 
-NOCOMP_SOURCES = src/asahi/guix/maintenance/files/authorized-keys/apple-m1.pub \
-	src/asahi/guix/maintenance/files/ssh/authorized-keys/ed25519/roman.pub \
-	src/asahi/guix/maintenance/files/ssh/authorized-keys/rsa/root.pub \
-	src/asahi/guix/maintenance/patches/cuirass-disable-jit.patch
+NOCOMP_SOURCES = modules/asahi/guix/maintenance/files/authorized-keys/apple-m1.pub \
+	modules/asahi/guix/maintenance/files/ssh/authorized-keys/ed25519/roman.pub \
+	modules/asahi/guix/maintenance/files/ssh/authorized-keys/rsa/root.pub \
+	modules/asahi/guix/maintenance/patches/cuirass-disable-jit.patch
 
-SOURCES = src/asahi/guix/maintenance/packages/ci.go \
-          src/asahi/guix/maintenance/packages/ci.scm \
-          src/asahi/guix/maintenance/systems/server.go \
-          src/asahi/guix/maintenance/systems/server.scm \
-          src/asahi/guix/maintenance/machines/server.go \
-          src/asahi/guix/maintenance/machines/server.scm \
-          src/asahi/guix/maintenance/hconfig.go \
-          src/asahi/guix/maintenance/manifest.scm \
-          src/asahi/guix/maintenance/channels.go \
-          src/asahi/guix/maintenance/channels.scm \
-          src/asahi/guix/maintenance/manifest.go \
-          src/asahi/guix/maintenance/hconfig.scm
+SOURCES = modules/asahi/guix/maintenance/packages/ci.scm \
+          modules/asahi/guix/maintenance/systems/server.scm \
+          modules/asahi/guix/maintenance/machines/server.scm \
+          modules/asahi/guix/maintenance/channels.scm \
+          modules/asahi/guix/maintenance/hconfig.scm
 
 TESTS =
 
 TEST_EXTENSIONS = .scm
 SCM_LOG_DRIVER =                                \
   $(top_builddir)/pre-inst-env                  \
-  $(GUILE) --no-auto-compile -e main -L src     \
+  $(GUILE) --no-auto-compile -e main -L modules     \
       $(top_srcdir)/build-aux/test-driver.scm
 
 # Tell 'build-aux/test-driver.scm' to display only source file names,
