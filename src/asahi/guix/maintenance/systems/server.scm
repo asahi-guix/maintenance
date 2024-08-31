@@ -325,8 +325,8 @@ COMMIT
            (unattended-upgrade-configuration
             (channels #~(list #$(channel->code %gnu-guix)
                               #$(channel->code %asahi-maintenance)))
-            ;; (schedule "0 4 * * *")
-            (schedule "*/3 * * * *")
+            (schedule "0 4 * * *")
+            ;; (schedule "*/3 * * * *")
             (services-to-restart
              '(avahi-daemon
                console-font-tty1
