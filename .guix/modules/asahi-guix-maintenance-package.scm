@@ -1,6 +1,7 @@
 (define-module (asahi-guix-maintenance-package)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages guile)
+  #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages)
   #:use-module (guix build-system gnu)
@@ -15,7 +16,7 @@
 (define %version "0.1.0")
 
 (define development-packages
-  '("autoconf" "automake" "guile-ares-rs" "gettext-minimal" "texinfo" "help2man" "guix"))
+  '("autoconf" "automake" "guile-ares-rs" "gettext-minimal" "texinfo" "help2man"))
 
 (define vcs-file?
   (or (git-predicate (string-append (current-source-directory) "/../.."))
@@ -38,8 +39,8 @@
      ;; Use 'specification->package' to get the latest version of
      ;; the development packages.
      (append (map specification->package development-packages)
-             (list pkg-config guile-next)))
-    (inputs (list guile-3.0))
+             (list pkg-config guile-next (current-guix))))
+    (inputs (list guile-next))
     ;; (propagated-inputs (list guile-config guile-lib))
     (synopsis "Asahi Guix Maintenance")
     (description "The docs, notes and code to maintain Asahi Guix.")
