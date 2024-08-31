@@ -10,8 +10,8 @@
   #:use-module (guix packages)
   #:use-module (guix utils))
 
-(display "ASAHI-GUIX-MAINTENANCE-PACKAGE\n")
-(format #t "CURRENT SOURCE DIR: ~a\n" (current-source-directory))
+;; (display "ASAHI-GUIX-MAINTENANCE-PACKAGE\n")
+;; (format #t "CURRENT SOURCE DIR: ~a\n" (current-source-directory))
 
 (define %version "0.1.0")
 
@@ -27,7 +27,7 @@
               #:recursive? #t
               #:select? vcs-file?))
 
-(format #t "SOURCE CHECKOUT: ~a\n" source-checkout)
+;; (format #t "SOURCE CHECKOUT: ~a\n" source-checkout)
 
 (define-public asahi-guix-maintenance
   (package
@@ -47,6 +47,6 @@
     (home-page "https://github.com/asahi-guix/maintenance")
     (license license:gpl3+)))
 
-(format #t "PACKAGE: ~a\n" asahi-guix-maintenance)
+;; (format #t "PACKAGE: ~a\n" asahi-guix-maintenance)
 
 asahi-guix-maintenance
