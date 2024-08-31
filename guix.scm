@@ -33,15 +33,8 @@
                     (string-contains file my-string))
                   (list ".git" ".dir-locals.el" "guix.scm"))))))
     (build-system gnu-build-system)
-    (arguments
-     (list
-      #:phases
-      #~(modify-phases %standard-phases
-          (add-after 'unpack 'hall
-            (lambda* (#:key inputs outputs #:allow-other-keys)
-              (invoke "hall" "build" "--execute"))))))
     (native-inputs
-     (list autoconf-2.71 automake guile-3.0 guile-hall pkg-config texinfo guix))
+     (list autoconf-2.71 automake guile-3.0 pkg-config texinfo guix))
     (inputs (list guile-3.0))
     (propagated-inputs (list guile-config guile-lib))
     (synopsis "Asahi Guix Maintenance")
