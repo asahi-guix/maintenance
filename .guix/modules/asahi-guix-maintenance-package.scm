@@ -40,7 +40,7 @@
      ;; the development packages.
      (append (map specification->package development-packages)
              (list pkg-config guile-next guix)))
-    (inputs (list guile-next))
+    (inputs (list guile-next guix))
     ;; (propagated-inputs (list guile-config guile-lib))
     (synopsis "Asahi Guix Maintenance")
     (description "The docs, notes and code to maintain Asahi Guix.")
