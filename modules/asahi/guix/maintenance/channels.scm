@@ -38,7 +38,7 @@
   (channel
    (name 'asahi-maintenance)
    (url "https://github.com/asahi-guix/maintenance")
-   (branch "remove-hall")
+   (branch "main")
    (introduction
     (make-channel-introduction
      "c665797c5065cbed81b0c4a9e121baff1f2ffcc0"
