@@ -1,8 +1,19 @@
-(use-modules ;; (guix)
-             (guix profiles)
+(use-modules (asahi guix maintenance packages guile-xyz)
+             (asahi guix maintenance systems server)
              (gnu packages base)
-             (asahi guix maintenance packages guile-xyz))
+             (gnu system)
+             (guix gexp)
+             (guix packages)
+             (guix profiles)
+             (guix profiles)
+             (guix transformations))
 
-;; (packages->manifest (list asahi-guix-maintenance))
+(define %asahi-guix-server
+  (manifest-entry
+    (name "asahi-guix-server")
+    (version "0.0.1")
+    (item asahi-guix-server-system)))
 
-(packages->manifest (list asahi-guix-maintenance hello which))
+(concatenate-manifests
+ (list (packages->manifest (list asahi-guix-maintenance hello which))
+       (manifest (list %asahi-guix-server))))
