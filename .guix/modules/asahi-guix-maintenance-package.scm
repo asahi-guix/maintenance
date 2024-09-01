@@ -19,7 +19,7 @@
   '("autoconf" "automake" "guile-ares-rs" "gettext-minimal" "texinfo" "help2man"))
 
 (define vcs-file?
-  (or (git-predicate (string-append (current-source-directory) "/../.."))
+  (or (git-predicate (dirname (dirname (current-source-directory))))
       (const #t)))
 
 (define source-checkout
