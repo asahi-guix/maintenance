@@ -172,65 +172,26 @@ COMMIT
   #~(list (specification
            (name "asahi-channel")
            (build '(channels asahi))
-           (channels (list #$(channel->code %asahi-guix)
-                           #$(channel->code %asahi-channel)))
+           (channels (list #$(channel->code %asahi-channel)
+                           #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))
           (specification
            (name "asahi-maintenance")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %gnu-guix)
-                           #$(channel->code %asahi-maintenance)))
+           (channels (list #$(channel->code %asahi-maintenance)
+                           #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))
-          (specification
-           (name "asahi-guix")
-           (build '(packages
-                    "gnome-desktop"
-                    "gtk"
-                    "jemalloc"
-                    "librewolf"
-                    "plasma-desktop"
-                    "rust"))
-           (channels (list #$(channel->code %asahi-guix)))
-           (systems '("aarch64-linux")))
-          ;; (specification
-          ;;  (name "asahi-guix-next")
-          ;;  (build '(packages
-          ;;           "gnome-desktop"
-          ;;           "gtk"
-          ;;           "jemalloc"
-          ;;           "librewolf"
-          ;;           "plasma-desktop"
-          ;;           "rust"))
-          ;;  (channels (list #$(channel->code %asahi-guix-next)))
-          ;;  (systems '("aarch64-linux")))
-          ;; (specification
-          ;;  (name "guix-core-updates")
-          ;;  (build '(packages
-          ;;           "gnome-desktop"
-          ;;           "gtk"
-          ;;           "jemalloc"
-          ;;           "librewolf"
-          ;;           "plasma-desktop"
-          ;;           "rust"))
-          ;;  (channels (list #$(channel->code %gnu-guix)))
-          ;;  (systems '("aarch64-linux")))
           (specification
            (name "r0man-channel")
            (build '(channels r0man-channel))
-           (channels (list #$(channel->code %asahi-guix)
+           (channels (list #$(channel->code %gnu-guix)
                            #$(channel->code %r0man-channel)))
            (systems '("aarch64-linux")))
-          ;; (specification
-          ;;  (name "asahi-images")
-          ;;  (build '(custom (asahi guix cuirass jobs)))
-          ;;  (channels (list #$(channel->code %gnu-guix-core-updates)
-          ;;                  #$(channel->code %asahi-channel)))
-          ;;  (systems '("aarch64-linux")))
           (specification
            (name "asahi-manifest")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-guix)
-                           #$(channel->code %asahi-channel)))
+           (channels (list #$(channel->code %asahi-channel)
+                           #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))))
 
 (define %cuirass-service
