@@ -2,7 +2,7 @@
 
 #+TITLE: Asahi Guix Maintenance
 
-[[https://ci.asahi-guix.org/jobset/asahi-maintenance][https://ci.asahi-guix.org/jobset/asahi-maintenance/badge.svg?type=0]]
+[[https://ci.asahi-guix.org/jobset/asahi-guix-maintenance][https://ci.asahi-guix.org/jobset/asahi-guix-maintenance/badge.svg?type=0]]
 
 The docs, notes and code to maintain Asahi Guix.
 
@@ -12,7 +12,7 @@ The [[https://guix.gnu.org/manual/en/html_node/Channels.html][channel]] [[https:
 
 #+begin_src scheme
   (channel
-   (name 'asahi-maintenance)
+   (name 'asahi-guix-maintenance)
    (url "https://github.com/asahi-guix/maintenance")
    (branch "main")
    (introduction

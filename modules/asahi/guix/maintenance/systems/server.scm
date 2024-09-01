@@ -170,15 +170,15 @@ COMMIT
 
 (define %cuirass-specifications
   #~(list (specification
-           (name "asahi-channel")
-           (build '(channels asahi))
-           (channels (list #$(channel->code %asahi-channel)
+           (name "asahi-guix-channel")
+           (build '(channels asahi-guix-channel))
+           (channels (list #$(channel->code %asahi-guix-channel)
                            #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))
           (specification
-           (name "asahi-maintenance")
+           (name "asahi-guix-maintenance")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-maintenance)
+           (channels (list #$(channel->code %asahi-guix-maintenance)
                            #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))
           (specification
@@ -188,9 +188,9 @@ COMMIT
                            #$(channel->code %r0man-channel)))
            (systems '("aarch64-linux")))
           (specification
-           (name "asahi-manifest")
+           (name "asahi-guix-manifest")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-channel)
+           (channels (list #$(channel->code %asahi-guix-channel)
                            #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux")))))
 
@@ -285,7 +285,7 @@ COMMIT
   (service unattended-upgrade-service-type
            (unattended-upgrade-configuration
             (channels #~(list #$(channel->code %gnu-guix)
-                              #$(channel->code %asahi-maintenance)))
+                              #$(channel->code %asahi-guix-maintenance)))
             (schedule "0 4 * * *")
             ;; (schedule "*/3 * * * *")
             (services-to-restart
@@ -364,7 +364,7 @@ COMMIT
                 (authorized-keys
                  (cons* (local-file "../files/authorized-keys/apple-m1.pub")
                         (guix-configuration-authorized-keys config)))
-                (channels (cons %asahi-maintenance %default-channels))))))
+                (channels (cons %asahi-guix-maintenance %default-channels))))))
 
 (define %swap-devices
   (list (swap-space (target "/swapfile"))))

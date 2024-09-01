@@ -1,9 +1,9 @@
 (define-module (asahi guix maintenance channels)
   #:use-module (guix channels))
 
-(define-public %asahi-channel
+(define-public %asahi-guix-channel
   (channel
-   (name 'asahi-channel)
+   (name 'asahi-guix-channel)
    (branch "main")
    (url "https://github.com/asahi-guix/channel")
    (introduction
@@ -23,9 +23,9 @@
      (openpgp-fingerprint
       "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
 
-(define-public %asahi-maintenance
+(define-public %asahi-guix-maintenance
   (channel
-   (name 'asahi-maintenance)
+   (name 'asahi-guix-maintenance)
    (url "https://github.com/asahi-guix/maintenance")
    (branch "main")
    (introduction
@@ -55,4 +55,4 @@
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
-(list %asahi-maintenance %gnu-guix)
+(list %asahi-guix-maintenance %gnu-guix)
