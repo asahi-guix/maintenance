@@ -200,7 +200,6 @@ COMMIT
             (cuirass cuirass-disable-jit)
             (host "localhost")
             (port 8081)
-            (threads 1)
             (specifications %cuirass-specifications)
             ;; (remote-server
             ;;  (cuirass-remote-server-configuration
