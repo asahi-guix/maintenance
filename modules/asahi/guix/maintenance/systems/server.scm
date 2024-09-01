@@ -226,13 +226,12 @@ COMMIT
           ;;  (channels (list #$(channel->code %gnu-guix-core-updates)
           ;;                  #$(channel->code %asahi-channel)))
           ;;  (systems '("aarch64-linux")))
-          ;; (specification
-          ;;  (name "asahi-manifest")
-          ;;  (build '(manifests ".guix/manifest.scm"))
-          ;;  (channels (list #$(channel->code %gnu-guix-core-updates)
-          ;;                  #$(channel->code %asahi-channel)))
-          ;;  (systems '("aarch64-linux")))
-          ))
+          (specification
+           (name "asahi-manifest")
+           (build '(manifests ".guix/manifest.scm"))
+           (channels (list #$(channel->code %asahi-guix)
+                           #$(channel->code %asahi-channel)))
+           (systems '("aarch64-linux")))))
 
 (define %cuirass-service
   (service cuirass-service-type
