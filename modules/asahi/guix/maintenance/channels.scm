@@ -23,17 +23,6 @@
      (openpgp-fingerprint
       "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
 
-(define-public %asahi-guix-next
-  (channel
-   (name 'guix)
-   (url "https://github.com/asahi-guix/guix")
-   (branch "next")
-   (introduction
-    (make-channel-introduction
-     "8743e8ba7633769b07e08a26c43d255300e75096"
-     (openpgp-fingerprint
-      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
-
 (define-public %asahi-maintenance
   (channel
    (name 'asahi-maintenance)
@@ -49,17 +38,6 @@
   (channel
    (name 'guix)
    (url "https://git.savannah.gnu.org/git/guix")
-   (introduction
-    (make-channel-introduction
-     "9edb3f66fd807b096b48283debdcddccfea34bad"
-     (openpgp-fingerprint
-      "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
-
-(define-public %gnu-guix-core-updates
-  (channel
-   (name 'guix)
-   (url "https://git.savannah.gnu.org/git/guix")
-   (branch "core-updates")
    (introduction
     (make-channel-introduction
      "9edb3f66fd807b096b48283debdcddccfea34bad"
