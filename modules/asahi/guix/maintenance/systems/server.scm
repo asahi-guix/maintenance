@@ -196,7 +196,7 @@ COMMIT
            (channels (list #$(channel->code %gnu-guix)
                            #$(channel->code %r0man-channel)))
            (systems '("aarch64-linux"))
-           (priority 7))))
+           (priority 6))))
 
 (define %cuirass-service
   (service cuirass-service-type
