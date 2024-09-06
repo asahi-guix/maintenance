@@ -1,12 +1,19 @@
 (use-modules (asahi guix maintenance packages guile-xyz)
              (asahi guix maintenance systems server)
-             (gnu packages base)
              (gnu system)
              (guix gexp)
+             (guix git-download)
              (guix packages)
              (guix profiles)
-             (guix profiles)
              (guix transformations))
+
+(define vcs-file?
+  (or (git-predicate "..") (const #t)))
+
+(define source-checkout
+  (local-file ".." "asahi-guix-maintenance-checkout"
+              #:recursive? #t
+              #:select? vcs-file?))
 
 (define %asahi-guix-server
   (manifest-entry
@@ -14,7 +21,11 @@
     (version "0.0.1")
     (item asahi-guix-server-system)))
 
-(format #t "asahi-guix-server: ~a~%" (package-source asahi-guix-maintenance))
+(define %asahi-guix-packages
+  (packages->manifest
+   (list (package
+           (inherit asahi-guix-maintenance)
+           (source source-checkout)))))
 
 (concatenate-manifests
  (list (packages->manifest (list asahi-guix-maintenance))
