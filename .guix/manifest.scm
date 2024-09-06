@@ -14,6 +14,8 @@
     (version "0.0.1")
     (item asahi-guix-server-system)))
 
+(format #t "asahi-guix-server: ~a~%" (package-source asahi-guix-maintenance))
+
 (concatenate-manifests
- (list (packages->manifest (list asahi-guix-maintenance hello which))
+ (list (packages->manifest (list asahi-guix-maintenance))
        (manifest (list %asahi-guix-server))))
