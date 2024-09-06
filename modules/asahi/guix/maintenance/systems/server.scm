@@ -215,7 +215,7 @@ COMMIT
   (service cuirass-remote-worker-service-type
            (cuirass-remote-worker-configuration
             (systems '("aarch64-linux"))
-            (workers 1))))
+            (workers 2))))
 
 (define (certbot-ssl-certificate domain)
   (format #f "/etc/certs/~a/fullchain.pem" domain))
