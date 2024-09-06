@@ -37,7 +37,7 @@
 (define-public %gnu-guix
   (channel
    (name 'guix)
-   (url "https://git.savannah.gnu.org/git/guix")
+   (url "https://git.savannah.gnu.org/git/guix.git")
    (introduction
     (make-channel-introduction
      "9edb3f66fd807b096b48283debdcddccfea34bad"
