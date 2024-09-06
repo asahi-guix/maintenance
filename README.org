@@ -1,8 +1,10 @@
 # -*- mode: org; coding: utf-8; -*-
 
-* Asahi Guix Maintenance [[https://ci.asahi-guix.org/jobset/asahi-guix-maintenance][https://ci.asahi-guix.org/jobset/asahi-guix-maintenance/badge.svg?type=0]]
+* Asahi Guix Maintenance
 
 The docs, notes and code to maintain Asahi Guix.
+
+[[https://ci.asahi-guix.org/jobset/asahi-guix-maintenance][https://ci.asahi-guix.org/jobset/asahi-guix-maintenance/badge.svg?type=0]]
 
 ** Channel Introduction
 
