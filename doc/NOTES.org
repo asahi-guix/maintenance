@@ -420,3 +420,5 @@ File Type
 ** Mesa
 *** Links
 - [[https://stackoverflow.com/questions/3127360/what-is-egl-and-how-can-i-use-it][What is EGL And How Can I Use It?]]
+** Sway
+- [[https://f-a.nz/dev/all-in-on-sway/][All in on Sway with Guix]]
