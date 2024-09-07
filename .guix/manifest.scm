@@ -21,12 +21,13 @@
     (version "0.0.1")
     (item asahi-guix-server-system)))
 
-(define %asahi-guix-packages
+(define %systems
+  (manifest (list %asahi-guix-server)))
+
+(define %packages
   (packages->manifest
    (list (package
            (inherit asahi-guix-maintenance)
            (source source-checkout)))))
 
-(concatenate-manifests
- (list (packages->manifest (list asahi-guix-maintenance))
-       (manifest (list %asahi-guix-server))))
+(concatenate-manifests (list %packages %systems))
