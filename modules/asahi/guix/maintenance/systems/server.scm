@@ -1,41 +1,34 @@
 (define-module (asahi guix maintenance systems server)
   #:use-module (asahi guix maintenance channels)
   #:use-module (asahi guix maintenance packages ci)
+  #:use-module (asahi guix maintenance services admin)
+  #:use-module (asahi guix maintenance services avahi)
+  #:use-module (asahi guix maintenance services base)
+  #:use-module (asahi guix maintenance services certbot)
+  #:use-module (asahi guix maintenance services cuirass)
+  #:use-module (asahi guix maintenance services databases)
+  #:use-module (asahi guix maintenance services databases)
+  #:use-module (asahi guix maintenance services networking)
+  #:use-module (asahi guix maintenance services security)
+  #:use-module (asahi guix maintenance services ssh)
+  #:use-module (asahi guix maintenance services virtualization)
+  #:use-module (asahi guix maintenance services web)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu bootloader)
   #:use-module (gnu packages admin)
-  #:use-module (gnu packages screen)
-  #:use-module (gnu packages certs)
-  #:use-module (gnu packages databases)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages linux)
-  #:use-module (gnu packages ssh)
+  #:use-module (gnu packages screen)
   #:use-module (gnu packages terminals)
-  #:use-module (gnu packages xorg)
-  #:use-module (gnu packages)
-  #:use-module (gnu services admin)
-  #:use-module (gnu services avahi)
-  #:use-module (gnu services base)
-  #:use-module (gnu services certbot)
-  #:use-module (gnu services cuirass)
-  #:use-module (gnu services databases)
   #:use-module (gnu packages version-control)
+  #:use-module (gnu services base)
   #:use-module (gnu services networking)
-  #:use-module (gnu services security)
-  #:use-module (gnu services sound)
-  #:use-module (gnu services ssh)
-  #:use-module (gnu services ssh)
-  #:use-module (gnu services virtualization)
-  #:use-module (gnu services web)
-  #:use-module (gnu services xorg)
   #:use-module (gnu services)
   #:use-module (gnu system accounts)
   #:use-module (gnu system file-systems)
   #:use-module (gnu system keyboard)
   #:use-module (gnu system linux-initrd)
-  #:use-module (gnu system nss)
   #:use-module (gnu system shadow)
-  #:use-module (gnu system uuid)
   #:use-module (gnu system)
   #:use-module (guix channels)
   #:use-module (guix gexp)
@@ -89,261 +82,6 @@
          (home-directory "/home/roman")
          (supplementary-groups '("audio" "netdev" "video" "wheel")))
         %base-user-accounts))
-
-(define %avahi-service
-  (service avahi-service-type))
-
-(define %fail2ban-service
-  (service fail2ban-service-type
-           (fail2ban-configuration
-            (extra-jails
-             (list
-              (fail2ban-jail-configuration
-               (name "sshd")
-               (enabled? #t)))))))
-
-(define %firewall-service
-  (service iptables-service-type
-           (iptables-configuration
-            (ipv4-rules (plain-file "iptables.rules" "*filter
-:INPUT ACCEPT
-:FORWARD ACCEPT
-:OUTPUT ACCEPT
--A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p tcp --dport 22 -j ACCEPT
--A INPUT -p tcp --dport 80 -j ACCEPT
--A INPUT -p tcp --dport 443 -j ACCEPT
--A INPUT -i lo -j ACCEPT
--A INPUT -j REJECT --reject-with icmp-port-unreachable
-COMMIT
-"))
-            (ipv6-rules (plain-file "ip6tables.rules" "*filter
-:INPUT ACCEPT
-:FORWARD ACCEPT
-:OUTPUT ACCEPT
--A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p tcp --dport 22 -j ACCEPT
--A INPUT -p tcp --dport 80 -j ACCEPT
--A INPUT -p tcp --dport 443 -j ACCEPT
--A INPUT -i lo -j ACCEPT
--A INPUT -j REJECT --reject-with icmp6-port-unreachable
-COMMIT
-")))))
-
-(define %ntp-service
-  (service ntp-service-type))
-
-(define %openssh-service
-  (service openssh-service-type
-           (openssh-configuration
-            (authorized-keys
-             `(("root" ,(local-file "../files/ssh/authorized-keys/ed25519/roman.pub"))
-               ("root" ,(local-file "../files/ssh/authorized-keys/rsa/root.pub"))
-               ("root" ,(local-file "../files/ssh/authorized-keys/rsa/roman.pub"))
-               ("roman" ,(local-file "../files/ssh/authorized-keys/ed25519/roman.pub"))
-               ("roman" ,(local-file "../files/ssh/authorized-keys/rsa/roman.pub"))))
-            (openssh openssh-sans-x)
-            (permit-root-login 'prohibit-password)
-            (port-number 22))))
-
-(define %nginx-deploy-hook
-  (program-file
-   "nginx-deploy-hook"
-   #~(let ((pid (call-with-input-file "/var/run/nginx/pid" read)))
-       (kill pid SIGHUP))))
-
-(define %certbot-service
-  (service certbot-service-type
-           (certbot-configuration
-            (email "roman@asahi-guix.org")
-            (certificates
-             (list
-              (certificate-configuration
-               (domains '("ci.asahi-guix.org"))
-               (deploy-hook %nginx-deploy-hook))
-              (certificate-configuration
-               (domains '("substitutes.asahi-guix.org"))
-               (deploy-hook %nginx-deploy-hook))
-              (certificate-configuration
-               (domains '("www.asahi-guix.org"))
-               (deploy-hook %nginx-deploy-hook)))))))
-
-(define %cuirass-specifications
-  #~(list (specification
-           (name "asahi-guix-channel")
-           (build '(channels asahi-guix-channel))
-           (channels (list #$(channel->code %asahi-guix-channel)
-                           #$(channel->code %gnu-guix)))
-           (systems '("aarch64-linux"))
-           (priority 8))
-          (specification
-           (name "asahi-guix-maintenance")
-           (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-guix-maintenance)
-                           #$(channel->code %gnu-guix)))
-           (systems '("aarch64-linux"))
-           (priority 9))
-          (specification
-           (name "asahi-guix-manifest")
-           (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-guix-channel)
-                           #$(channel->code %gnu-guix)))
-           (systems '("aarch64-linux"))
-           (priority 7))
-          (specification
-           (name "r0man-channel")
-           (build '(channels r0man-channel))
-           (channels (list #$(channel->code %gnu-guix)
-                           #$(channel->code %r0man-channel)))
-           (systems '("aarch64-linux"))
-           (priority 6))))
-
-(define %cuirass-service
-  (service cuirass-service-type
-           (cuirass-configuration
-            (cuirass cuirass-disable-jit)
-            (host "localhost")
-            (port 8081)
-            (specifications %cuirass-specifications)
-            ;; (remote-server
-            ;;  (cuirass-remote-server-configuration
-            ;;   (backend-port 5555)
-            ;;   (log-port 5556)
-            ;;   (publish-port 5557)))
-            )))
-
-(define %cuirass-remote-worker-service
-  (service cuirass-remote-worker-service-type
-           (cuirass-remote-worker-configuration
-            (cuirass cuirass-disable-jit)
-            (systems '("aarch64-linux"))
-            (workers 2))))
-
-(define (certbot-ssl-certificate domain)
-  (format #f "/etc/certs/~a/fullchain.pem" domain))
-
-(define (certbot-ssl-certificate-key domain)
-  (format #f "/etc/certs/~a/privkey.pem" domain))
-
-(define %http-service
-  (service
-   nginx-service-type
-   (nginx-configuration
-    (server-blocks
-     (list
-      (nginx-server-configuration
-       (server-name '("www.asahi-guix.org"))
-       (listen '("443 ssl" "[::]:443 ssl"))
-       (ssl-certificate (certbot-ssl-certificate "www.asahi-guix.org"))
-       (ssl-certificate-key (certbot-ssl-certificate-key "www.asahi-guix.org"))
-       (locations
-        (list
-         (nginx-location-configuration
-          (uri "/")
-          (body '("return 404;"))))))
-      (nginx-server-configuration
-       (server-name '("ci.asahi-guix.org"))
-       (listen '("443 ssl" "[::]:443 ssl"))
-       (ssl-certificate (certbot-ssl-certificate "ci.asahi-guix.org"))
-       (ssl-certificate-key (certbot-ssl-certificate-key "ci.asahi-guix.org"))
-       (locations
-        (list
-         (nginx-location-configuration
-          (uri "~ ^/admin")
-          (body (list "if ($ssl_client_verify != SUCCESS) { return 403; } proxy_pass http://cuirass;")))
-         (nginx-location-configuration
-          (uri "/")
-          (body '("proxy_pass http://cuirass;"))))))
-      (nginx-server-configuration
-       (server-name '("substitutes.asahi-guix.org"))
-       (listen '("443 ssl" "[::]:443 ssl"))
-       (ssl-certificate (certbot-ssl-certificate "substitutes.asahi-guix.org"))
-       (ssl-certificate-key (certbot-ssl-certificate-key "substitutes.asahi-guix.org"))
-       (locations
-        (list
-         (nginx-location-configuration
-          (uri "/")
-          (body '("proxy_pass http://guix-publish;"))))))))
-    (upstream-blocks
-     (list (nginx-upstream-configuration
-            (name "cuirass")
-            (servers (list "127.0.0.1:8081")))
-           (nginx-upstream-configuration
-            (name "guix-publish")
-            (servers (list "127.0.0.1:8082"))))))))
-
-(define %http-service-bootstrap
-  (service
-   nginx-service-type
-   (nginx-configuration
-    (server-blocks
-     (list
-      (nginx-server-configuration
-       (locations
-        (list
-         (nginx-location-configuration
-          (uri "/")
-          (body '("return 404;")))))))))))
-
-(define %unattended-upgrade-service
-  (service unattended-upgrade-service-type
-           (unattended-upgrade-configuration
-            (channels #~(list #$(channel->code %gnu-guix)
-                              #$(channel->code %asahi-guix-maintenance)))
-            (schedule "0 4 * * *")
-            ;; (schedule "*/3 * * * *")
-            (services-to-restart
-             '(avahi-daemon
-               console-font-tty1
-               console-font-tty2
-               console-font-tty3
-               console-font-tty4
-               console-font-tty5
-               console-font-tty6
-               cuirass
-               cuirass-remote-server
-               cuirass-remote-worker
-               cuirass-web
-               dbus-system
-               fail2ban
-               guix-daemon
-               guix-publish
-               mcron
-               nginx
-               nscd
-               pam
-               postgres
-               qemu-binfmt
-               ssh-daemon
-               syslogd
-               term-console
-               term-tty1
-               term-tty2
-               term-tty3
-               term-tty4
-               term-tty5
-               term-tty6
-               virtual-terminal)))))
-
-(define %guix-publish-service
-  (service guix-publish-service-type
-           (guix-publish-configuration
-            (compression '(("zstd" 3)))
-            (port 8082))))
-
-(define %postgresql-service
-  (service postgresql-service-type
-           (postgresql-configuration
-            (postgresql postgresql-15))))
-
-(define %qemu-service-x86-64
-  (service qemu-binfmt-service-type
-           (qemu-binfmt-configuration
-            (platforms (lookup-qemu-platforms
-                        (cond ((target-aarch64?)
-                               "x86_64")
-                              ((target-x86-64?)
-                               "aarch64")))))))
 
 (define %services
   (modify-services (cons* %avahi-service
