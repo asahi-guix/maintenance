@@ -205,11 +205,12 @@ COMMIT
             (host "localhost")
             (port 8081)
             (specifications %cuirass-specifications)
-            (remote-server
-             (cuirass-remote-server-configuration
-              (backend-port 5555)
-              (log-port 5556)
-              (publish-port 5557))))))
+            ;; (remote-server
+            ;;  (cuirass-remote-server-configuration
+            ;;   (backend-port 5555)
+            ;;   (log-port 5556)
+            ;;   (publish-port 5557)))
+            )))
 
 (define %cuirass-remote-worker-service
   (service cuirass-remote-worker-service-type
