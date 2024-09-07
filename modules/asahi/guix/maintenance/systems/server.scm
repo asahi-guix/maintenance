@@ -214,6 +214,7 @@ COMMIT
 (define %cuirass-remote-worker-service
   (service cuirass-remote-worker-service-type
            (cuirass-remote-worker-configuration
+            (cuirass cuirass-disable-jit)
             (systems '("aarch64-linux"))
             (workers 2))))
 
