@@ -86,12 +86,11 @@
 (define %services
   (modify-services (cons* %avahi-service
                           %certbot-service
-                          ;; %cuirass-remote-worker-service
+                          %cuirass-remote-worker-service
                           %cuirass-service
                           %fail2ban-service
                           %firewall-service
                           %guix-publish-service
-                          ;; %http-service-bootstrap
                           %http-service
                           %ntp-service
                           %openssh-service
