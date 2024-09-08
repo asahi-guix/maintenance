@@ -54,4 +54,4 @@
            (cuirass-remote-worker-configuration
             (cuirass cuirass-disable-jit)
             (systems '("aarch64-linux"))
-            (workers 1))))
+            (workers 4))))
