@@ -4,8 +4,8 @@
 (define-public %asahi-guix-channel
   (channel
    (name 'asahi-guix-channel)
-   (branch "main")
    (url "https://github.com/asahi-guix/channel")
+   (branch "main")
    (introduction
     (make-channel-introduction
      "3eeb493b037bea44f225c4314c5556aa25aff36c"
@@ -47,11 +47,22 @@
 (define-public %r0man-channel
   (channel
    (name 'r0man-channel)
-   (branch "main")
    (url "https://github.com/r0man/guix-channel")
+   (branch "main")
    (introduction
     (make-channel-introduction
      "8eb7a76af9b51b80f5c01f18639e6360833fc377"
+     (openpgp-fingerprint
+      "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
+
+(define-public %r0man-home
+  (channel
+   (name 'r0man-home)
+   (url "https://github.com/r0man/guix-home")
+   (branch "main")
+   (introduction
+    (make-channel-introduction
+     "71d2daabc30e2a2e50a66d93ae57bcfc982a6966"
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
