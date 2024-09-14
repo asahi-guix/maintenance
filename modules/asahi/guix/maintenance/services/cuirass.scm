@@ -38,8 +38,7 @@
           (specification
            (name "r0man-home")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-guix-channel)
-                           #$(channel->code %gnu-guix)
+           (channels (list #$(channel->code %gnu-guix)
                            #$(channel->code %r0man-home)))
            (systems '("aarch64-linux"))
            (priority 5))))
