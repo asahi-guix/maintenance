@@ -9,7 +9,8 @@
 (define %cuirass-specifications
   #~(list (specification
            (name "asahi-guix-channel")
-           (build '(channels asahi-guix-channel))
+           ;; (build '(channels asahi-guix-channel))
+           (build '(custom (asahi guix ci)))
            (channels (list #$(channel->code %asahi-guix-channel)
                            #$(channel->code %gnu-guix)))
            (systems '("aarch64-linux"))
