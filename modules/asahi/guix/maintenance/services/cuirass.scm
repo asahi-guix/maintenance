@@ -29,13 +29,6 @@
            (systems '("aarch64-linux"))
            (priority 1))
           (specification
-           (name "asahi-guix-manifest")
-           (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-guix-channel)
-                           #$(channel->code %gnu-guix)))
-           (systems '("aarch64-linux"))
-           (priority 3))
-          (specification
            (name "r0man-channel")
            (build '(channels r0man-channel))
            (channels (list #$(channel->code %gnu-guix)
