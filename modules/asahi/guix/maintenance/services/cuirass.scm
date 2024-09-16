@@ -14,11 +14,11 @@
            (channels (list #$(channel->code %asahi-guix-channel)
                            #$(channel->code %gnu-guix)))
            (build-outputs
-            (build-output
-             (job "asahi-installer-image*")
-             (type "archive")
-             (output "out")
-             (path "")))
+            (list (build-output
+                   (job "asahi-installer-image*")
+                   (type "archive")
+                   (output "out")
+                   (path ""))))
            (systems '("aarch64-linux"))
            (priority 2))
           (specification
