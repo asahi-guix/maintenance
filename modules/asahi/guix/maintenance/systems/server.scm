@@ -8,6 +8,7 @@
   #:use-module (asahi guix maintenance services cuirass)
   #:use-module (asahi guix maintenance services databases)
   #:use-module (asahi guix maintenance services databases)
+  #:use-module (asahi guix maintenance services mcron)
   #:use-module (asahi guix maintenance services networking)
   #:use-module (asahi guix maintenance services security)
   #:use-module (asahi guix maintenance services ssh)
@@ -92,6 +93,7 @@
                           %firewall-service
                           %guix-publish-service
                           %http-service
+                          %mcron-service
                           %ntp-service
                           %openssh-service
                           %postgresql-service
