@@ -432,3 +432,6 @@ File Type
 - [[https://f-a.nz/dev/all-in-on-sway/][All in on Sway with Guix]]
 ** Fedora
 - [[https://www.youtube.com/watch?v=PiPLDDgtEek][Flock 2024 Fedora Asahi Remix: a year later]]
+** TODOs
+- Use 4K block size in disk image (mentioned in Flock 2024 Fedora Asahi Remix: a year later)
+- Use BTRFS as root partition (mentioned in Flock 2024 Fedora Asahi Remix: a year later)
