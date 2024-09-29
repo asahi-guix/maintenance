@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
-guix deploy asahi/guix/maintenance/machines/server.scm
-guix deploy asahi/guix/maintenance/machines/server.scm -x -- herd restart cuirass
+guix deploy modules/asahi/guix/maintenance/machines/server.scm
+guix deploy modules/asahi/guix/maintenance/machines/server.scm -x -- herd restart cuirass
