@@ -55,6 +55,7 @@ SOURCES = \
 	modules/asahi/guix/maintenance/services/ssh.scm \
 	modules/asahi/guix/maintenance/services/virtualization.scm \
 	modules/asahi/guix/maintenance/services/web.scm \
+	modules/asahi/guix/maintenance/services/website.scm \
 	modules/asahi/guix/maintenance/systems/server.scm
 
 TESTS =

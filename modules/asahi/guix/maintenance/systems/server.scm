@@ -7,13 +7,13 @@
   #:use-module (asahi guix maintenance services certbot)
   #:use-module (asahi guix maintenance services cuirass)
   #:use-module (asahi guix maintenance services databases)
-  #:use-module (asahi guix maintenance services databases)
   #:use-module (asahi guix maintenance services mcron)
   #:use-module (asahi guix maintenance services networking)
   #:use-module (asahi guix maintenance services security)
   #:use-module (asahi guix maintenance services ssh)
   #:use-module (asahi guix maintenance services virtualization)
   #:use-module (asahi guix maintenance services web)
+  #:use-module (asahi guix maintenance services website)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu bootloader)
   #:use-module (gnu packages admin)
@@ -85,7 +85,8 @@
         %base-user-accounts))
 
 (define %services
-  (modify-services (cons* %avahi-service
+  (modify-services (cons* %asahi-website-service
+                          %avahi-service
                           %certbot-service
                           %cuirass-remote-worker-service
                           %cuirass-service
