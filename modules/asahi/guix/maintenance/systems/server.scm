@@ -66,11 +66,9 @@
 
 (define %packages
   (cons* e2fsprogs
-         emacs
+         emacs-minimal
          git
          htop
-         htop
-         kitty
          net-tools
          screen
          %base-packages))
