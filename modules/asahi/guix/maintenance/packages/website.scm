@@ -30,13 +30,14 @@
               (replace 'install
                 (lambda* (#:key inputs #:allow-other-keys)
                   (let ((installer-script (assoc-ref inputs "asahi-installer-script"))
+                        (web-root (string-append #$output "/share/asahi-guix-website"))
                         (os-root (string-append #$output "/share/asahi-guix-website/os")))
                     ;; Add index.html.
-                    (mkdir-p #$output)
-                    (invoke "touch" (string-append #$output "/index.html"))
+                    (mkdir-p web-root)
+                    (invoke "touch" (string-append web-root "/index.html"))
                     ;; Add installer bootstrap script.
                     (copy-file (string-append installer-script "/bin/asahi-guix-installer.sh")
-                               (string-append #$output "/install.sh"))
+                               (string-append web-root "/install.sh"))
                     ;; Copy operating systems and installer data.
                     (mkdir-p os-root)
                     (define os-dirs
