@@ -1,5 +1,6 @@
 (define-module (asahi guix maintenance services website)
   #:use-module (asahi guix maintenance services certbot)
+  #:use-module (asahi guix maintenance services web)
   #:use-module (asahi guix packages installer)
   #:use-module (asahi guix packages website)
   #:use-module (gnu packages base)
@@ -32,7 +33,7 @@
            (default asahi-guix-website))
   (port asahi-website-configuration-port (default '("8880")))
   (server-name asahi-website-configuration-server-name
-               (default "test.asahi-guix.org")))
+               (default "www.asahi-guix.org")))
 
 (define asahi-website-activation
   (match-lambda
@@ -52,21 +53,22 @@
     (($ <asahi-website-configuration>
         contact deploy-directory package port server-name)
      (list (certificate-configuration
-            (domains (list server-name)))))))
+            (domains (list server-name))
+            (deploy-hook %certbot-deploy-hook))))))
 
 (define asahi-website-nginx-config
   (match-lambda
     (($ <asahi-website-configuration>
         contact deploy-directory package port server-name)
      (let ((cert (certbot-ssl-certificate server-name))
-           (key (certbot-ssl-certificate-key server-name)))
+           (key (certbot-ssl-certificate-key server-name))
+           (root (string-append deploy-directory "/" server-name)))
        (list (nginx-server-configuration
               (server-name (list server-name))
-              (listen port)
+              (listen '("443 ssl" "[::]:443 ssl"))
               (ssl-certificate cert)
               (ssl-certificate-key key)
-              (root deploy-directory)
-              (locations (list (nginx-php-location)))))))))
+              (root root)))))))
 
 (define asahi-website-profile-config
   (match-lambda
