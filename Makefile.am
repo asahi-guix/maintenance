@@ -44,6 +44,7 @@ SOURCES = \
 	modules/asahi/guix/maintenance/machines/server.scm \
 	modules/asahi/guix/maintenance/packages/ci.scm \
 	modules/asahi/guix/maintenance/packages/guile-xyz.scm \
+	modules/asahi/guix/maintenance/packages/website.scm \
 	modules/asahi/guix/maintenance/services/admin.scm \
 	modules/asahi/guix/maintenance/services/avahi.scm \
 	modules/asahi/guix/maintenance/services/base.scm \
