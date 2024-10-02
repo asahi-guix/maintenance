@@ -135,11 +135,13 @@ Device              Start       End   Sectors   Size Type
 
 *** Installation
 
-Format file systems.
+Format ext4 file system.
 
 #+begin_src sh :dir /sudo:: :results verbatim
   sudo mkfs.ext4 -L asahi-guix-root /dev/nvme0n1p14
 #+end_src
+
+Tune the file system with =metadata_csum_seed= to avoid Grub failing.
 
 #+begin_src sh :dir /sudo:: :results verbatim
   sudo tune2fs -O ^metadata_csum_seed /dev/nvme0n1p14
@@ -147,6 +149,12 @@ Format file systems.
 
 #+RESULTS:
 : tune2fs 1.47.0 (5-Feb-2023)
+
+Or, format btrfs file system.
+
+#+begin_src sh :dir /sudo:: :results verbatim
+  sudo mkfs.btrfs -L asahi-guix-root -f /dev/nvme0n1p14
+#+end_src
 
 Mount file systems.
 
