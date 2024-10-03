@@ -61,10 +61,9 @@
     (inputs (list asahi-installer-script
                   asahi-guix-base-installer-package
                   asahi-guix-edge-installer-package
-                  ;; asahi-guix-gnome-installer-package
-                  ;; asahi-guix-plasma-installer-package
-                  ;; asahi-guix-sway-installer-package
-                  ))
+                  asahi-guix-gnome-installer-package
+                  asahi-guix-plasma-installer-package
+                  asahi-guix-sway-installer-package))
     (synopsis "Asahi Guix website")
     (description "This package provides the Asahi Guix website.")
     (license license:gpl3+)))
