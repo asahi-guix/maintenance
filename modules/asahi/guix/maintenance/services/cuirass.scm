@@ -50,6 +50,7 @@
             (host "localhost")
             (port 8081)
             (specifications %cuirass-specifications)
+            (ttl 432000) ;; 5 days
             (remote-server
              (cuirass-remote-server-configuration
               (backend-port 5555)
