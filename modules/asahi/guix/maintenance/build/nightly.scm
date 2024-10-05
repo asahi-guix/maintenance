@@ -15,6 +15,11 @@
 (define %output-dir
   "/tmp/asahi/guix/nightly")
 
+(define (installer-data-file-basename path)
+  (let ((parts (string-split path #\/)))
+    (when (> (length parts) 3)
+      (list-ref parts 3))))
+
 (define (installer-package-dir directory)
   (string-append directory "/" %installer-package-dir))
 
@@ -33,8 +38,13 @@
   (map (lambda (file)
          (cons file (read-installer-data file)))
        (find-files (installer-package-dir directory)
-                     (lambda (path stats)
-                       (string-suffix? ".json" path)))))
+                   (lambda (path stats)
+                     (string-suffix? ".json" path)))))
+
+(define* (deploy-entry entry output-dir)
+  (let ((file (car entry))
+        (data (cdr entry)))
+    (format #t "- ~a\n" file)))
 
 (define* (asahi-guix-nightly-run
           #:key
@@ -44,10 +54,11 @@
          (resolved-paths (append-map resolve-package-path paths)))
     (mkdir-p output-dir)
     (for-each (lambda (entry)
-                (let ((dir (car entry))
-                      (data (cdr entry)))
-                  (format #t "- ~a\n" dir)))
-              resolved-paths)))
+                (deploy-entry entry output-dir))
+              resolved-paths)
+    resolved-paths))
+
+;; (installer-data-file-basename "/gnu/store/62f3f761iw87gcdby07sjnhxsawb8rhf-asahi-guix-base-installer-package-0.0.1/share/asahi-installer/os/asahi-guix-base-1.4.0-25.e85f52e.json")
 
 ;; Getopt
 
