@@ -19,6 +19,9 @@
 (define %build-time-format
   "%Y-%m-%dT%H:%M:%S")
 
+(define %build-time-format
+  "%Y%m%d%H%M%S")
+
 (define %installer-os-dir
   "share/asahi-installer/os")
 
@@ -127,7 +130,7 @@
 (define (installer-os-new-name builder package os)
   (let* ((derivation (website-package-derivation package))
          (time (localtime (derivation-build-time derivation))))
-    (string-append (installer-os-name os) " - "  (strftime %build-time-format time))))
+    (string-append (installer-os-name os) " ("  (strftime %build-time-format time) ")")))
 
 ;; Deploy
 
@@ -245,7 +248,7 @@ a:active {
   (let ((packages (website-builder-packages builder)))
     `(body
       (div (@ (style "font-family: 'Open Sans', sans-serif;"))
-           (h1 (style "font-family: 'Montserrat', sans-serif") "Asahi Guix builds")
+           (h1 (@ (style "font-family: 'Montserrat', sans-serif")) "Asahi Guix builds")
            (p "These are automated builds that have not been tested, use at your own risk.")
            (p (pre (@ (style "font-size: 20px")) "curl https://www.asahi-guix.org/builds | sh"))
            ,(website-sxml-installer-list packages)))))
@@ -255,7 +258,7 @@ a:active {
          ,(website-sxml-body builder)))
 
 (define (website-index-file builder)
-  (string-append (website-builder-output-dir builder) "/index.html"))
+  (string-append (website-builder-output-dir builder) "/builds.html"))
 
 (define (render-website builder)
   (let ((file (website-index-file builder)))
