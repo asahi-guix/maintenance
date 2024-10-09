@@ -41,6 +41,7 @@ NOCOMP_SOURCES = \
 SOURCES = \
 	modules/asahi/guix/maintenance/channels.scm \
 	modules/asahi/guix/maintenance/hconfig.scm \
+        modules/asahi/guix/maintenance/build/website.scm \
 	modules/asahi/guix/maintenance/machines/server.scm \
 	modules/asahi/guix/maintenance/packages/ci.scm \
 	modules/asahi/guix/maintenance/packages/guile-xyz.scm \
