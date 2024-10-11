@@ -1,7 +1,6 @@
 (define-module (asahi guix maintenance build website)
   #:use-module (asahi guix build installer metadata)
   #:use-module (asahi guix build installer os)
-  #:use-module (ice-9 string-fun)
   #:use-module (guix base16)
   #:use-module (guix build utils)
   #:use-module (guix derivations)
@@ -14,8 +13,21 @@
   #:use-module (ice-9 popen)
   #:use-module (ice-9 pretty-print)
   #:use-module (ice-9 regex)
+  #:use-module (ice-9 string-fun)
   #:use-module (sxml simple)
   #:use-module (srfi srfi-1))
+
+(define %domain
+  "www.asahi-guix.org")
+
+(define %installer-metadata-filename
+  "installer-data.json")
+
+(define %report-tag
+  "agx-prod")
+
+(define %report-url
+  "https://stats.asahi-guix.org/report")
 
 (define %build-time-format
   "%Y-%m-%d %H:%M:%S")
@@ -30,9 +42,16 @@
   website-builder
   make-website-builder
   website-builder?
+  (domain website-builder-domain (default %domain))
+  (installer-metadata-filename website-builder-installer-metadata-filename (default %installer-metadata-filename))
+  (installer-data website-builder-installer-data (default %installer-data))
+  (installer-data-alternative website-builder-installer-data-alternative (default %installer-data))
   (max-packages website-builder-max-packages (default #f))
   (output-dir website-builder-output-dir (default %output-dir))
   (packages website-builder-packages (default #f))
+  (report-tag website-builder-report-tag (default %report-tag))
+  (report-url website-builder-report-url (default %report-url))
+  (script-path website-builder-script-path (default #f))
   (store-path website-builder-store-path (default (%store-directory))))
 
 (define-record-type* <website-package>
@@ -44,8 +63,13 @@
   (installer-metadata website-package-installer-metadata)
   (log-file website-package-log-file))
 
+(define (website-builder-installer-data-url builder)
+  (string-append "https://" (website-builder-domain builder) "/"
+                 (website-builder-installer-metadata-filename builder)))
+
 (define (website-builder-metadata-path builder)
-  (string-append (website-builder-output-dir builder) "/installer_data.json"))
+  (string-append (website-builder-output-dir builder) "/"
+                 (website-builder-installer-metadata-filename builder)))
 
 (define (website-builder-installer-metadata builder)
   (let ((packages (website-builder-packages builder)))
@@ -111,19 +135,23 @@
 
 (define (find-packages builder store)
   (let ((store-path (website-builder-store-path builder)))
-    (sort (map (lambda (derivation)
-                 (website-package
-                  (build-time (derivation-build-time derivation))
-                  (derivation derivation)
-                  (installer-metadata (derivation-installer-metadata derivation))
-                  (log-file (log-file store (derivation-file-name derivation)))))
-               (filter derivation-installer-os-dir-exists?
-                       (find-installer-package-derivations store-path)))
+    (sort (filter website-package?
+                  (map (lambda (derivation)
+                         (let ((log-file (log-file store (derivation-file-name derivation)))
+                               (metadata (derivation-installer-metadata derivation)))
+                           (when (and log-file metadata)
+                             (website-package
+                              (build-time (derivation-build-time derivation))
+                              (derivation derivation)
+                              (installer-metadata metadata)
+                              (log-file log-file)))))
+                       (filter derivation-installer-os-dir-exists?
+                               (find-installer-package-derivations store-path))))
           compare-build-time)))
 
 (define (installer-os-relative-dir package)
   (let ((derivation (website-package-derivation package)))
-    (string-append "os/" (bytevector->base16-string (derivation-hash derivation)))))
+    (string-append "os/" (string-drop-right (basename (derivation-file-name derivation)) 4))))
 
 (define (installer-os-target-dir builder package)
   (let ((derivation (website-package-derivation package)))
@@ -169,7 +197,6 @@
                    (installer-metadata-os-list data))))))
 
 (define (deploy-log-file builder package)
-
   (if (website-package-log-file package)
       (let* ((source (website-package-log-file package))
              (extension (file-extension source))
@@ -198,6 +225,35 @@
     (write-installer-metadata data target)
     builder))
 
+(define (website-builder-installer-script-target builder)
+  (string-append (website-builder-output-dir builder) "/install.sh"))
+
+(define (deploy-website-installer-script builder)
+  (let ((source (website-builder-script-path builder)))
+    (when (and (string? source) (file-exists? source))
+      (let ((target (website-builder-installer-script-target builder)))
+        (mkdir-p (dirname target))
+        (copy-file source target)
+        (chmod target #o755)
+        (substitute* target
+          (("INSTALLER_DATA=.*")
+           (string-append
+            "INSTALLER_DATA="
+            (website-builder-installer-data-url builder) "\n"))
+          (("INSTALLER_DATA_ALT=.*")
+           (string-append
+            "INSTALLER_DATA_ALT="
+            (website-builder-installer-data-url builder) "\n"))
+          (("REPORT=.*")
+           (string-append
+            "REPORT="
+            (website-builder-report-url builder) "\n"))
+          (("REPORT_TAG=.*")
+           (string-append
+            "REPORT_TAG="
+            (website-builder-report-tag builder) "\n")))
+        builder))))
+
 (define (deploy-packages builder)
   (website-builder
    (inherit builder)
@@ -210,7 +266,9 @@
     (when (directory-exists? output-dir)
       (delete-file-recursively output-dir))
     (mkdir-p output-dir)
-    (deploy-website-installer-metadata (deploy-packages builder))))
+    (deploy-website-installer-script
+     (deploy-website-installer-metadata
+      (deploy-packages builder)))))
 
 ;; Render
 
@@ -296,11 +354,15 @@ a:active {
   '((help (single-char #\h) (value #f))
     (max-packages (single-char #\m) (value #t))
     (output-dir (single-char #\o) (value #t))
-    (store-path (single-char #\s) (value #t))))
+    (script-path (single-char #\s) (value #t))
+    (store-path (single-char #\S) (value #t))))
 
 (define (max-packages-option options)
   (let ((max (option-ref options 'max-packages #f)))
     (and (string? max) (string->number max))))
+
+(define (script-path-option options)
+  (option-ref options 'script-path #f))
 
 (define (store-path-option options)
   (option-ref options 'store-path (%store-directory)))
@@ -311,10 +373,11 @@ a:active {
 (define (show-usage)
   (format #t  "Usage: asahi-guix-nightly [options]\n\n")
   (format #t  "Options:\n")
+  (format #t  "  -S, --store-path=PATH      The path to the Guix store (default: ~a)\n" (%store-directory))
   (format #t  "  -h, --help                 Show help\n")
   (format #t  "  -m, --max-packages=NUM     The maximum number of packages\n")
   (format #t  "  -o, --output-dir=DIR       Output directory (default: ~a)\n" %output-dir)
-  (format #t  "  -s, --store-path=PATH      The path to the Guix store (default: ~a)\n" (%store-directory)))
+  (format #t  "  -s, --script-path=PATH     The path to the Asahi installer script\n"))
 
 (define* (asahi-website-builder-main args)
   (let ((options (getopt-long args option-spec)))
@@ -324,13 +387,7 @@ a:active {
          (website-builder
           (max-packages (max-packages-option options))
           (output-dir (output-dir-option options))
+          (script-path (script-path-option options))
           (store-path (store-path-option options)))))))
 
-;; (define my-builder (asahi-website-builder-main '("nightly")))
-;; ;; (use-modules (ice-9 pretty-print))
-;; ;; (pretty-print m)
-
-;; (define my-drvs
-;;   (filter derivation-output-path-exists? (find-installer-package-derivations "/gnu/store")))
-
-;; (pretty-print my-drvs)
+;; (define my-builder (asahi-website-builder-main '("asahi-build-website" "-s" "/gnu/store/sifb7aj7nfc55rg6id9w2divcr7gi5vp-asahi-installer-script-0.0.1/bin/asahi-guix-installer.sh")))
