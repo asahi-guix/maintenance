@@ -66,4 +66,6 @@
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
-(list %asahi-guix-maintenance %gnu-guix)
+(list %asahi-guix-channel
+      %asahi-guix-maintenance
+      %gnu-guix)
