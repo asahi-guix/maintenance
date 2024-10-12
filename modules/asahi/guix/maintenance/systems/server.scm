@@ -83,7 +83,7 @@
         %base-user-accounts))
 
 (define %services
-  (modify-services (cons* ;; %asahi-website-service
+  (modify-services (cons* %asahi-website-service
                           %avahi-service
                           %certbot-service
                           %cuirass-remote-worker-service
