@@ -1,9 +1,11 @@
 (define-module (asahi guix maintenance services website)
+  ;; #:use-module (asahi guix build modules)
   #:use-module (asahi guix maintenance packages website)
   #:use-module (asahi guix maintenance services certbot)
   #:use-module (asahi guix maintenance services web)
   #:use-module (asahi guix packages installer)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages guile)
   #:use-module (gnu services certbot)
   #:use-module (gnu services mcron)
   #:use-module (gnu services web)
@@ -58,19 +60,38 @@
             (domains (list server-name))
             (deploy-hook %certbot-deploy-hook))))))
 
+(define (asahi-module-name? name)
+  "Return true if NAME (a list of symbols) denotes a Guix or Asahi module."
+  (match name
+    (('asahi _ ...) #t)
+    (('gnu _ ...) #t)
+    (('guix _ ...) #t)
+    (_ #f)))
+
+(define (import-asahi-module? module)
+  "Return true if MODULE is not (guix store deduplication)"
+  (and (asahi-module-name? module)
+       ;; Since we don't use deduplication support in 'populate-store', don't
+       ;; import (guix store deduplication) and its dependencies, which
+       ;; includes Guile-Gcrypt.
+       (not (equal? module '(guix store deduplication)))
+       ;; Dragging in (guix config) fails :/
+       ;; ERROR: In procedure symlink: In procedure symlink: File exists
+       ;; (not (equal? module '(guix config)))
+       ))
+
 (define (asahi-website-mcron-config config)
-  (list #~(job "*/5 * * * *"
-               #$(program-file
-                  "build-website.scm"
-                  (with-imported-modules (source-module-closure
-                                          '((guix build utils)))
-                    #~(begin
-                        (use-modules (guix build utils)
-                                     (ice-9 popen)
-                                     (ice-9 regex)
-                                     (ice-9 textual-ports)
-                                     (srfi srfi-2))
-                        (format #t "Building website...~%")))))))
+  (with-extensions (list guile-json-4)
+    (with-imported-modules (source-module-closure
+                            '((asahi guix maintenance build website))
+                            #:select? import-asahi-module?)
+      (list #~(job "*/1 * * * *"
+                   #$(program-file
+                      "build-website.scm"
+                      #~(begin
+                          (use-modules (asahi guix maintenance build website))
+                          (format #t "Building website ...~%")
+                          (format #t "REVISION 1\n"))))))))
 
 (define asahi-website-nginx-config
   (match-lambda

@@ -6,7 +6,6 @@
   #:use-module (guix derivations)
   #:use-module (guix gexp)
   #:use-module (guix records)
-  #:use-module (guix records)
   #:use-module (guix store)
   #:use-module (ice-9 ftw)
   #:use-module (ice-9 getopt-long)
