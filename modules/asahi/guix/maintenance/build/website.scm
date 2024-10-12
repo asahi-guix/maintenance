@@ -44,8 +44,6 @@
   website-builder?
   (domain website-builder-domain (default %domain))
   (installer-metadata-filename website-builder-installer-metadata-filename (default %installer-metadata-filename))
-  (installer-data website-builder-installer-data (default %installer-data))
-  (installer-data-alternative website-builder-installer-data-alternative (default %installer-data))
   (max-packages website-builder-max-packages (default #f))
   (output-dir website-builder-output-dir (default %output-dir))
   (packages website-builder-packages (default #f))
@@ -139,7 +137,7 @@
                   (map (lambda (derivation)
                          (let ((log-file (log-file store (derivation-file-name derivation)))
                                (metadata (derivation-installer-metadata derivation)))
-                           (when (and log-file metadata)
+                           (when (installer-metadata? metadata)
                              (website-package
                               (build-time (derivation-build-time derivation))
                               (derivation derivation)
@@ -186,8 +184,6 @@
        (name new-os-name)
        (package (installer-os-new-package package os))))))
 
-;; (begin (deploy-website my-builder) #f)
-
 (define (deploy-package-installer-metadata builder package)
   (let ((data (website-package-installer-metadata package)))
     (installer-metadata
@@ -221,8 +217,9 @@
 (define (deploy-website-installer-metadata builder)
   (let ((target (website-builder-metadata-path builder))
         (data (website-builder-installer-metadata builder)))
-    (mkdir-p (dirname target))
-    (write-installer-metadata data target)
+    (when (installer-metadata? data)
+      (mkdir-p (dirname target))
+      (write-installer-metadata data target))
     builder))
 
 (define (website-builder-installer-script-target builder)
@@ -345,8 +342,7 @@ a:active {
     (let ((builder (website-builder
                     (inherit builder)
                     (packages (find-packages builder %store)))))
-      (when (website-builder-packages builder)
-        (render-website (deploy-website builder))))))
+      (render-website (deploy-website builder)))))
 
 ;; Getopt
 
