@@ -106,7 +106,9 @@
                 (authorized-keys
                  (cons* (local-file "../files/authorized-keys/apple-m1.pub")
                         (guix-configuration-authorized-keys config)))
-                (channels (cons %asahi-guix-maintenance %default-channels))))))
+                (channels (cons* %asahi-guix-maintenance
+                                 %asahi-guix-channel
+                                 %default-channels))))))
 
 (define %swap-devices
   (list (swap-space (target "/swapfile"))))
