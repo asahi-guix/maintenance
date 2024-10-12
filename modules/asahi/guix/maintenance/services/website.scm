@@ -5,11 +5,13 @@
   #:use-module (asahi guix packages installer)
   #:use-module (gnu packages base)
   #:use-module (gnu services certbot)
+  #:use-module (gnu services mcron)
   #:use-module (gnu services web)
   #:use-module (gnu services)
+  #:use-module (guix gexp)
+  #:use-module (guix modules)
   #:use-module (guix records)
   #:use-module (ice-9 match)
-  #:use-module (guix gexp)
   #:export (%asahi-website-service
             asahi-website-configuration
             asahi-website-configuration-contact
@@ -56,6 +58,20 @@
             (domains (list server-name))
             (deploy-hook %certbot-deploy-hook))))))
 
+(define (asahi-website-mcron-config config)
+  (list #~(job "*/5 * * * *"
+               #$(program-file
+                  "build-website.scm"
+                  (with-imported-modules (source-module-closure
+                                          '((guix build utils)))
+                    #~(begin
+                        (use-modules (guix build utils)
+                                     (ice-9 popen)
+                                     (ice-9 regex)
+                                     (ice-9 textual-ports)
+                                     (srfi srfi-2))
+                        (format #t "Building website...~%")))))))
+
 (define asahi-website-nginx-config
   (match-lambda
     (($ <asahi-website-configuration>
@@ -81,15 +97,18 @@
    (name 'asahi-website)
    (extensions
     (list
-     (service-extension activation-service-type
-                        asahi-website-activation)
+     ;; (service-extension activation-service-type
+     ;;                    asahi-website-activation)
      (service-extension certbot-service-type
                         asahi-website-certbot-config)
+     (service-extension mcron-service-type
+                        asahi-website-mcron-config)
      (service-extension nginx-service-type
                         asahi-website-nginx-config)
      ;; Make sure the website doesn't get garbage collected.
-     (service-extension profile-service-type
-                        asahi-website-profile-config)))
+     ;; (service-extension profile-service-type
+     ;;                    asahi-website-profile-config)
+     ))
    (default-value (asahi-website-configuration))
    (description "Run the Asahi-Guix website.")))
 
