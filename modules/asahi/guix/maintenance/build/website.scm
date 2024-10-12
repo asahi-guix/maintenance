@@ -14,7 +14,26 @@
   #:use-module (ice-9 regex)
   #:use-module (ice-9 string-fun)
   #:use-module (sxml simple)
-  #:use-module (srfi srfi-1))
+  #:use-module (srfi srfi-1)
+  #:export (build-website
+            make-website-builder
+            make-website-package
+            website-builder
+            website-builder-domain
+            website-builder-installer-metadata-filename
+            website-builder-max-packages
+            website-builder-output-dir
+            website-builder-packages
+            website-builder-report-tag
+            website-builder-report-url
+            website-builder-script-path
+            website-builder-store-path
+            website-builder?
+            website-package
+            website-package-build-time
+            website-package-installer-metadata
+            website-package-log-file
+            website-package?))
 
 (define %domain
   "www.asahi-guix.org")
