@@ -59,11 +59,12 @@
                     (merge-data (append-map find-data-files os-dirs))))))))))
     (home-page "https://www.asahi-guix.org")
     (inputs (list asahi-installer-script
-                  asahi-guix-base-installer-package
-                  asahi-guix-edge-installer-package
-                  asahi-guix-gnome-installer-package
-                  asahi-guix-plasma-installer-package
-                  asahi-guix-sway-installer-package))
+                  asahi-installer-package-base
+                  ;; asahi-installer-package-edge
+                  ;; asahi-installer-package-gnome
+                  ;; asahi-installer-package-plasma
+                  ;; asahi-installer-package-sway
+                  ))
     (synopsis "Asahi Guix website")
     (description "This package provides the Asahi Guix website.")
     (license license:gpl3+)))
