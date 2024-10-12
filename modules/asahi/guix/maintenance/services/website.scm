@@ -1,5 +1,4 @@
 (define-module (asahi guix maintenance services website)
-  ;; #:use-module (asahi guix build modules)
   #:use-module (asahi guix maintenance packages website)
   #:use-module (asahi guix maintenance services certbot)
   #:use-module (asahi guix maintenance services web)
@@ -91,7 +90,10 @@
                       #~(begin
                           (use-modules (asahi guix maintenance build website))
                           (format #t "Building website ...~%")
-                          (format #t "REVISION 1\n"))))))))
+                          (build-website
+                           (website-builder
+                            (script-path #$(file-append asahi-installer-script "/bin/asahi-guix-installer.sh"))))
+                          (format #t "Successfully built website.~%"))))))))
 
 (define asahi-website-nginx-config
   (match-lambda
