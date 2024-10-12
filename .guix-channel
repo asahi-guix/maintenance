@@ -2,4 +2,14 @@
 (channel
  (version 0)
  (directory "modules")
- (url "https://github.com/asahi-guix/maintenance"))
+ (url "https://github.com/asahi-guix/maintenance")
+ (dependencies
+  (channel
+   (name asahi)
+   (url "https://github.com/asahi-guix/channel")
+   (branch "main")
+   (introduction
+    (channel-introduction
+     (version 0)
+     (commit "3eeb493b037bea44f225c4314c5556aa25aff36c")
+     (signer "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199"))))))
