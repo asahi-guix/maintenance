@@ -92,6 +92,7 @@
                           (format #t "Building website ...~%")
                           (build-website
                            (website-builder
+                            (output-dir "/srv/http/www.asahi-guix.org/builds")
                             (script-path #$(file-append asahi-installer-script "/bin/asahi-guix-installer.sh"))))
                           (format #t "Successfully built website.~%"))))))))
 
@@ -120,8 +121,8 @@
    (name 'asahi-website)
    (extensions
     (list
-     ;; (service-extension activation-service-type
-     ;;                    asahi-website-activation)
+     (service-extension activation-service-type
+                        asahi-website-activation)
      (service-extension certbot-service-type
                         asahi-website-certbot-config)
      (service-extension mcron-service-type
@@ -129,9 +130,8 @@
      (service-extension nginx-service-type
                         asahi-website-nginx-config)
      ;; Make sure the website doesn't get garbage collected.
-     ;; (service-extension profile-service-type
-     ;;                    asahi-website-profile-config)
-     ))
+     (service-extension profile-service-type
+                        asahi-website-profile-config)))
    (default-value (asahi-website-configuration))
    (description "Run the Asahi-Guix website.")))
 
