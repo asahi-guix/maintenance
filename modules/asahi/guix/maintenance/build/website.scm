@@ -80,7 +80,7 @@
   (log-file website-package-log-file))
 
 (define (website-builder-installer-data-url builder)
-  (string-append "https://" (website-builder-domain builder) "/"
+  (string-append "https://" (website-builder-domain builder) "/builds/"
                  (website-builder-installer-data-filename builder)))
 
 (define (website-builder-metadata-path builder)
