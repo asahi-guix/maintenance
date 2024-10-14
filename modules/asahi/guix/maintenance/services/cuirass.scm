@@ -8,11 +8,11 @@
 
 (define %cuirass-specifications
   #~(list (specification
-           (name "asahi-guix-channel")
+           (name "asahi")
            ;; (build '(channels asahi-guix-channel))
            (build '(custom (asahi guix ci)))
-           (channels (list #$(channel->code %asahi-guix-channel)
-                           #$(channel->code %gnu-guix)))
+           (channels (list #$(channel->code %asahi-channel)
+                           #$(channel->code %gnu-guix-channel)))
            (build-outputs
             (list (build-output
                    (job "asahi-installer-image*")
@@ -24,22 +24,22 @@
           (specification
            (name "asahi-guix-maintenance")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %asahi-guix-maintenance)
-                           #$(channel->code %gnu-guix)))
+           (channels (list #$(channel->code %asahi-maintenance-channel)
+                           #$(channel->code %gnu-guix-channel)))
            (systems '("aarch64-linux"))
            (priority 1))
           (specification
            (name "r0man-channel")
            (build '(channels r0man-channel))
-           (channels (list #$(channel->code %gnu-guix)
+           (channels (list #$(channel->code %gnu-guix-channel)
                            #$(channel->code %r0man-channel)))
            (systems '("aarch64-linux"))
            (priority 4))
           (specification
            (name "r0man-home")
            (build '(manifests ".guix/manifest.scm"))
-           (channels (list #$(channel->code %gnu-guix)
-                           #$(channel->code %r0man-home)))
+           (channels (list #$(channel->code %gnu-guix-channel)
+                           #$(channel->code %r0man-home-channel)))
            (systems '("aarch64-linux"))
            (priority 5))))
 

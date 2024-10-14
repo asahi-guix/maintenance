@@ -1,9 +1,9 @@
 (define-module (asahi guix maintenance channels)
   #:use-module (guix channels))
 
-(define-public %asahi-guix-channel
+(define-public %asahi-channel
   (channel
-   (name 'asahi-guix-channel)
+   (name 'asahi)
    (url "https://github.com/asahi-guix/channel")
    (branch "main")
    (introduction
@@ -12,7 +12,7 @@
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
-(define-public %asahi-guix-fork
+(define-public %asahi-gnu-guix-channel
   (channel
    (name 'guix)
    (url "https://github.com/asahi-guix/guix")
@@ -23,9 +23,9 @@
      (openpgp-fingerprint
       "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA")))))
 
-(define-public %asahi-guix-maintenance
+(define-public %asahi-maintenance-channel
   (channel
-   (name 'asahi-guix-maintenance)
+   (name 'asahi-maintenance)
    (url "https://github.com/asahi-guix/maintenance")
    (branch "main")
    (introduction
@@ -34,7 +34,7 @@
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
-(define-public %gnu-guix
+(define-public %gnu-guix-channel
   (channel
    (name 'guix)
    (url "https://git.savannah.gnu.org/git/guix.git")
@@ -55,7 +55,7 @@
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
-(define-public %r0man-home
+(define-public %r0man-home-channel
   (channel
    (name 'r0man-home)
    (url "https://github.com/r0man/guix-home")
@@ -66,6 +66,6 @@
      (openpgp-fingerprint
       "D226 A339 D8DF 4481 5DDE  0CA0 3DDA 5252 7D2A C199")))))
 
-(list %asahi-guix-channel
-      %asahi-guix-maintenance
-      %gnu-guix)
+(list %asahi-channel
+      %asahi-maintenance-channel
+      %gnu-guix-channel)

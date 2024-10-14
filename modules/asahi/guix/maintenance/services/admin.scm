@@ -8,8 +8,8 @@
 (define-public %unattended-upgrade-service
   (service unattended-upgrade-service-type
            (unattended-upgrade-configuration
-            (channels #~(list #$(channel->code %gnu-guix)
-                              #$(channel->code %asahi-guix-maintenance)))
+            (channels #~(list #$(channel->code %gnu-guix-channel)
+                              #$(channel->code %asahi-maintenance-channel)))
             (schedule "0 4 * * *")
             ;; (schedule "*/3 * * * *")
             (services-to-restart
