@@ -314,7 +314,8 @@ a:active {
 
 (define (website-sxml-installer-list-item package)
   (let* ((data (website-package-installer-data package))
-         (os (car (installer-data-os-list data))))
+         (os (car (installer-data-os-list data)))
+         (log-file (website-package-log-file package)))
     `(li ,(installer-os-name os)
          " - "
          (a (@ (href ,(installer-os-package os)))
@@ -322,9 +323,10 @@ a:active {
          " : "
          (a (@ (href ,(installer-os-metadata os)))
             "installer metadata")
-         " : "
-         (a (@ (href ,(website-package-log-file package)))
-            "build logs"))))
+         ,@(if (and (string? log-file) (file-exists? log-file))
+               `(" : " (a (@ (href ,(website-package-log-file package)))
+                          "build logs"))
+               '()))))
 
 (define (website-sxml-installer-list packages)
   `(ul (@ (id "installer-list"))
