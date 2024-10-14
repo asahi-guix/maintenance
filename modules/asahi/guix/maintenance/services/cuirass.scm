@@ -22,7 +22,7 @@
            (systems '("aarch64-linux"))
            (priority 2))
           (specification
-           (name "asahi-guix-maintenance")
+           (name "asahi-maintenance")
            (build '(manifests ".guix/manifest.scm"))
            (channels (list #$(channel->code %asahi-maintenance-channel)
                            #$(channel->code %gnu-guix-channel)))
