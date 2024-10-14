@@ -54,7 +54,7 @@
   "share/asahi-installer/os")
 
 (define %output-dir
-  "/tmp/asahi-guix/website")
+  "/tmp/asahi-guix/website/builds")
 
 (define-record-type* <website-builder>
   website-builder
@@ -104,7 +104,7 @@
       (match:substring matches 1))))
 
 (define (installer-package-derivation-path? filename)
-  (string-match ".*-asahi-installer-package-(.+)\\.drv" (basename filename)))
+  (string-match ".*-asahi-installer-os-(.+)\\.drv" (basename filename)))
 
 (define (find-installer-package-derivation-paths store-path)
   (map (lambda (path)
@@ -338,7 +338,7 @@ a:active {
       (div (@ (style "font-family: 'Open Sans', sans-serif;"))
            (h1 (@ (style "font-family: 'Montserrat', sans-serif")) "Asahi Guix builds")
            (p "These are automated builds that have not been tested, use at your own risk.")
-           (p (pre (@ (style "font-size: 20px")) "curl https://www.asahi-guix.org/builds | sh"))
+           (p (pre (@ (style "font-size: 20px")) "curl https://www.asahi-guix.org/builds/install.sh | sh"))
            ,(website-sxml-installer-list packages)))))
 
 (define (website-sxml builder)
@@ -346,7 +346,7 @@ a:active {
          ,(website-sxml-body builder)))
 
 (define (website-index-file builder)
-  (string-append (website-builder-output-dir builder) "/builds.html"))
+  (string-append (website-builder-output-dir builder) "/index.html"))
 
 (define (render-website builder)
   (let ((file (website-index-file builder)))
@@ -387,7 +387,7 @@ a:active {
   (option-ref options 'output-dir %output-dir))
 
 (define (show-usage)
-  (format #t  "Usage: asahi-guix-nightly [options]\n\n")
+  (format #t  "Usage: asahi-guix-builds [options]\n\n")
   (format #t  "Options:\n")
   (format #t  "  -S, --store-path=PATH      The path to the Guix store (default: ~a)\n" (%store-directory))
   (format #t  "  -h, --help                 Show help\n")
