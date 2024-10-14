@@ -1,6 +1,6 @@
 (define-module (asahi guix maintenance build website)
-  #:use-module (asahi guix build installer metadata)
-  #:use-module (asahi guix build installer os)
+  #:use-module (asahi guix installer data)
+  #:use-module (asahi guix installer os)
   #:use-module (guix base16)
   #:use-module (guix build utils)
   #:use-module (guix derivations)
@@ -20,7 +20,7 @@
             make-website-package
             website-builder
             website-builder-domain
-            website-builder-installer-metadata-filename
+            website-builder-installer-data-filename
             website-builder-max-packages
             website-builder-output-dir
             website-builder-packages
@@ -31,14 +31,14 @@
             website-builder?
             website-package
             website-package-build-time
-            website-package-installer-metadata
+            website-package-installer-data
             website-package-log-file
             website-package?))
 
 (define %domain
   "www.asahi-guix.org")
 
-(define %installer-metadata-filename
+(define %installer-data-filename
   "installer-data.json")
 
 (define %report-tag
@@ -61,7 +61,7 @@
   make-website-builder
   website-builder?
   (domain website-builder-domain (default %domain))
-  (installer-metadata-filename website-builder-installer-metadata-filename (default %installer-metadata-filename))
+  (installer-data-filename website-builder-installer-data-filename (default %installer-data-filename))
   (max-packages website-builder-max-packages (default #f))
   (output-dir website-builder-output-dir (default %output-dir))
   (packages website-builder-packages (default #f))
@@ -76,25 +76,25 @@
   website-package?
   (build-time website-package-build-time)
   (derivation website-package-derivation)
-  (installer-metadata website-package-installer-metadata)
+  (installer-data website-package-installer-data)
   (log-file website-package-log-file))
 
 (define (website-builder-installer-data-url builder)
   (string-append "https://" (website-builder-domain builder) "/"
-                 (website-builder-installer-metadata-filename builder)))
+                 (website-builder-installer-data-filename builder)))
 
 (define (website-builder-metadata-path builder)
   (string-append (website-builder-output-dir builder) "/"
-                 (website-builder-installer-metadata-filename builder)))
+                 (website-builder-installer-data-filename builder)))
 
-(define (website-builder-installer-metadata builder)
+(define (website-builder-installer-data builder)
   (let ((packages (website-builder-packages builder)))
-    (reduce merge-installer-metadata #f (map website-package-installer-metadata packages))))
+    (reduce merge-installer-data #f (map website-package-installer-data packages))))
 
 (define (website-package-name package)
-  (let ((data (website-package-installer-metadata package)))
-    (when (installer-metadata? data)
-      (let ((os (car (installer-metadata-os-list data))))
+  (let ((data (website-package-installer-data package)))
+    (when (installer-data? data)
+      (let ((os (car (installer-data-os-list data))))
         (when (installer-os? os)
           (installer-os-package os))))))
 
@@ -127,21 +127,21 @@
   (when (derivation-output-path-exists? derivation)
     (stat:ctime (stat (derivation->output-path derivation)))))
 
-(define (derivation-installer-metadata-files derivation)
+(define (derivation-installer-data-files derivation)
   (when (derivation-output-path-exists? derivation)
     (find-files (derivation-installer-os-dir derivation)
                 (lambda (path stats)
                   (string-suffix? ".json" path)))))
 
-(define (derivation-installer-metadata derivation)
-  (let ((files (derivation-installer-metadata-files derivation)))
-    (reduce merge-installer-metadata #f
+(define (derivation-installer-data derivation)
+  (let ((files (derivation-installer-data-files derivation)))
+    (reduce merge-installer-data #f
             (remove null? (map (lambda (file)
                                  (with-exception-handler
                                      (lambda (e)
                                        (format #t "Warning: Invalid installer metadata ~a.\n" file)
                                        #f)
-                                   (lambda () (read-installer-metadata file))
+                                   (lambda () (read-installer-data file))
                                    #:unwind? #t))
                                files)))))
 
@@ -154,12 +154,12 @@
     (sort (filter website-package?
                   (map (lambda (derivation)
                          (let ((log-file (log-file store (derivation-file-name derivation)))
-                               (metadata (derivation-installer-metadata derivation)))
-                           (when (installer-metadata? metadata)
+                               (metadata (derivation-installer-data derivation)))
+                           (when (installer-data? metadata)
                              (website-package
                               (build-time (derivation-build-time derivation))
                               (derivation derivation)
-                              (installer-metadata metadata)
+                              (installer-data metadata)
                               (log-file log-file)))))
                        (filter derivation-installer-os-dir-exists?
                                (find-installer-package-derivations store-path))))
@@ -202,13 +202,13 @@
        (name new-os-name)
        (package (installer-os-new-package package os))))))
 
-(define (deploy-package-installer-metadata builder package)
-  (let ((data (website-package-installer-metadata package)))
-    (installer-metadata
+(define (deploy-package-installer-data builder package)
+  (let ((data (website-package-installer-data package)))
+    (installer-data
      (inherit data)
      (os-list (map (lambda (os)
                      (deploy-installer-os builder package os))
-                   (installer-metadata-os-list data))))))
+                   (installer-data-os-list data))))))
 
 (define (deploy-log-file builder package)
   (if (website-package-log-file package)
@@ -229,15 +229,15 @@
 (define (deploy-package builder package)
   (website-package
    (inherit package)
-   (installer-metadata (deploy-package-installer-metadata builder package))
+   (installer-data (deploy-package-installer-data builder package))
    (log-file (deploy-log-file builder package))))
 
-(define (deploy-website-installer-metadata builder)
+(define (deploy-website-installer-data builder)
   (let ((target (website-builder-metadata-path builder))
-        (data (website-builder-installer-metadata builder)))
-    (when (installer-metadata? data)
+        (data (website-builder-installer-data builder)))
+    (when (installer-data? data)
       (mkdir-p (dirname target))
-      (write-installer-metadata data target))
+      (write-installer-data data target))
     builder))
 
 (define (website-builder-installer-script-target builder)
@@ -282,7 +282,7 @@
       (delete-file-recursively output-dir))
     (mkdir-p output-dir)
     (deploy-website-installer-script
-     (deploy-website-installer-metadata
+     (deploy-website-installer-data
       (deploy-packages builder)))))
 
 ;; Render
@@ -313,8 +313,8 @@ a:active {
   (string-replace-substring (installer-os-package os) ".zip" ".json"))
 
 (define (website-sxml-installer-list-item package)
-  (let* ((data (website-package-installer-metadata package))
-         (os (car (installer-metadata-os-list data))))
+  (let* ((data (website-package-installer-data package))
+         (os (car (installer-data-os-list data))))
     `(li ,(installer-os-name os)
          " - "
          (a (@ (href ,(installer-os-package os)))
