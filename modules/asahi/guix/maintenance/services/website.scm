@@ -73,7 +73,7 @@
        ;; Since we don't use deduplication support in 'populate-store', don't
        ;; import (guix store deduplication) and its dependencies, which
        ;; includes Guile-Gcrypt.
-       (not (equal? module '(guix store deduplication)))
+       ;; (not (equal? module '(guix store deduplication)))
        ;; Dragging in (guix config) fails :/
        ;; ERROR: In procedure symlink: In procedure symlink: File exists
        ;; (not (equal? module '(guix config)))
