@@ -16,14 +16,14 @@
     (build-system copy-build-system)
     (arguments
      (list
-      #:modules '((asahi guix build installer)
+      #:modules '((asahi guix installer data)
                   (guix build copy-build-system)
                   (guix build utils)
                   (srfi srfi-1))
       #:phases
       (with-extensions (list guile-json-4)
         (with-imported-modules (source-module-closure
-                                '((asahi guix build installer))
+                                '((asahi guix installer data))
                                 #:select? import-asahi-module?)
           #~(modify-phases %standard-phases
               (delete 'unpack)
@@ -59,11 +59,11 @@
                     (merge-data (append-map find-data-files os-dirs))))))))))
     (home-page "https://www.asahi-guix.org")
     (inputs (list asahi-installer-script
-                  asahi-installer-package-base
-                  ;; asahi-installer-package-edge
-                  ;; asahi-installer-package-gnome
-                  ;; asahi-installer-package-plasma
-                  ;; asahi-installer-package-sway
+                  asahi-installer-os-base
+                  asahi-installer-os-edge
+                  ;; asahi-installer-os-gnome
+                  ;; asahi-installer-os-plasma
+                  ;; asahi-installer-os-sway
                   ))
     (synopsis "Asahi Guix website")
     (description "This package provides the Asahi Guix website.")
