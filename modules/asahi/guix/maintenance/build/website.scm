@@ -38,9 +38,6 @@
 (define %domain
   "www.asahi-guix.org")
 
-(define %installer-data-filename
-  "installer-data.json")
-
 (define %report-tag
   "agx-prod")
 
