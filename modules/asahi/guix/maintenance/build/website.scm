@@ -109,7 +109,15 @@
        (scandir store-path installer-package-derivation-path?)))
 
 (define (find-installer-package-derivations store-path)
-  (map read-derivation-from-file (find-installer-package-derivation-paths store-path)))
+  (filter derivation?
+          (map (lambda (file)
+                 (with-exception-handler
+                     (lambda (exception)
+                       (format #t "Warning: Can't read derivation: ~a.\n" file)
+                       #f)
+                   (lambda () (read-derivation-from-file file))
+                   #:unwind? #t))
+               (find-installer-package-derivation-paths store-path))))
 
 (define (derivation-output-path-exists? derivation)
   (directory-exists? (derivation->output-path derivation)))
