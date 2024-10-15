@@ -332,7 +332,7 @@ a:active {
          " : "
          (a (@ (href ,(installer-os-metadata os)))
             "installer metadata")
-         ,@(if (and (string? log-file) (file-exists? log-file))
+         ,@(if (string? log-file)
                `(" : " (a (@ (href ,(website-package-log-file package)))
                           "build logs"))
                '()))))
