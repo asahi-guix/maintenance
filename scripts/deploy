@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-guix deploy modules/asahi/guix/maintenance/machines/server.scm
+guix deploy modules/asahi/guix/maintenance/machines/server.scm -v 5 -K
 guix deploy modules/asahi/guix/maintenance/machines/server.scm -x -- herd restart cuirass
 guix deploy modules/asahi/guix/maintenance/machines/server.scm -x -- herd restart nginx
 guix deploy modules/asahi/guix/maintenance/machines/server.scm -x -- herd restart mcron
