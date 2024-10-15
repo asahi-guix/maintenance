@@ -170,9 +170,12 @@
                                (find-installer-package-derivations store-path))))
           compare-build-time)))
 
-(define (installer-os-relative-dir package)
+(define (installer-os-derivation-name package)
   (let ((derivation (website-package-derivation package)))
-    (string-append "os/" (string-drop-right (basename (derivation-file-name derivation)) 4))))
+    (string-drop-right (basename (derivation-file-name derivation)) 4)))
+
+(define (installer-os-relative-dir package)
+  (string-append "os/" (installer-os-derivation-name package)))
 
 (define (installer-os-target-dir builder package)
   (let ((derivation (website-package-derivation package)))
@@ -183,7 +186,8 @@
   (string-append (installer-os-target-dir builder package) "/" (basename source)))
 
 (define (installer-os-new-package package os)
-  (string-append (installer-os-relative-dir package) "/" (installer-os-package os)))
+  (string-append (installer-os-derivation-name package) "/"
+                 (installer-os-package os) ".zip"))
 
 (define (installer-os-new-name builder package os)
   (let* ((derivation (website-package-derivation package))
