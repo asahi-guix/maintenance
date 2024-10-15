@@ -172,7 +172,7 @@
 
 (define (installer-os-relative-dir package)
   (let ((derivation (website-package-derivation package)))
-    (string-append (string-drop-right (basename (derivation-file-name derivation)) 4))))
+    (string-append "os/" (string-drop-right (basename (derivation-file-name derivation)) 4))))
 
 (define (installer-os-target-dir builder package)
   (let ((derivation (website-package-derivation package)))
