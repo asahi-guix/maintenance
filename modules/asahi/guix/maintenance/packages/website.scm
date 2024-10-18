@@ -52,7 +52,7 @@
                       (let ((data (map read-installer-data sources)))
                         (write-installer-data
                          (reduce merge-installer-data #f data)
-                         (string-append os-root "/installer_data.json"))))
+                         (string-append web-root "/installer_data.json"))))
                     (define (find-data-files dir)
                       (find-files dir ".json"))
                     (for-each symlink-os os-dirs)
