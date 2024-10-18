@@ -192,8 +192,12 @@
             (package (deploy-package-target-path builder package))
             (metadata (deploy-metadata-target-path builder package)))
         (mkdir-p (dirname package))
+        (when (file-exists? package)
+          (delete-file package))
         (symlink (installer-os-package os) package)
         (mkdir-p (dirname metadata))
+        (when (file-exists? metadata)
+          (delete-file metadata))
         (symlink (deploy-metadata-source-path os) metadata)
         (installer-os
          (inherit os)
@@ -220,6 +224,8 @@
       (if (and (string? log-file) (file-exists? log-file))
           (let ((target (deploy-log-file-path builder package)))
             (mkdir-p (dirname target))
+            (when (file-exists? target)
+              (delete-file target))
             (symlink log-file target)
             target)
           (format #t "Warning: No log file found for ~a.\n"
