@@ -256,16 +256,17 @@
 
 (define (deploy-website-installer-script builder)
   (let ((source (website-builder-script-path builder)))
-    (when (and (string? source) (file-exists? source))
-      (write-installer-script
-       (installer-script
-        (inherit (read-installer-script source))
-        (installer-data (website-builder-installer-data-url builder))
-        (installer-data-alt (website-builder-installer-data-url builder))
-        (repo-base (website-builder-repo-base builder))
-        (report (website-builder-report-url builder))
-        (report-tag (website-builder-report-tag builder)))
-       (website-builder-installer-script-target builder)))
+    (if (and (string? source) (file-exists? source))
+        (write-installer-script
+         (installer-script
+          (inherit (read-installer-script source))
+          (installer-data (website-builder-installer-data-url builder))
+          (installer-data-alt (website-builder-installer-data-url builder))
+          (repo-base (website-builder-repo-base builder))
+          (report (website-builder-report-url builder))
+          (report-tag (website-builder-report-tag builder)))
+         (website-builder-installer-script-target builder))
+        (display (format #t "Warning: Not deploying installer script.\n")))
     builder))
 
 (define (deploy-packages builder)
