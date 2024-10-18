@@ -93,7 +93,7 @@
                           (build-website
                            (website-builder
                             (output-dir "/srv/http/www.asahi-guix.org/builds")
-                            (script-path #$(file-append asahi-installer-script "/bin/asahi-guix-installer.sh"))))
+                            (script-path #$(file-append asahi-installer-script "/bin/asahi-guix-install"))))
                           (format #t "Successfully built website.~%"))))))))
 
 (define asahi-website-nginx-config
