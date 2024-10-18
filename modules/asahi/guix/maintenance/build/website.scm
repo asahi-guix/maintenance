@@ -266,7 +266,7 @@
           (report (website-builder-report-url builder))
           (report-tag (website-builder-report-tag builder)))
          (website-builder-installer-script-target builder))
-        (display (format #t "Warning: Not deploying installer script.\n")))
+        (format #t "Warning: Not deploying installer script.\n"))
     builder))
 
 (define (deploy-packages builder)
