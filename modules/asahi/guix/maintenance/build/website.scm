@@ -1,6 +1,7 @@
 (define-module (asahi guix maintenance build website)
   #:use-module (asahi guix installer data)
   #:use-module (asahi guix installer os)
+  #:use-module (asahi guix installer script)
   #:use-module (guix base16)
   #:use-module (guix build utils)
   #:use-module (guix derivations)
@@ -20,10 +21,10 @@
             make-website-package
             website-builder
             website-builder-domain
-            website-builder-installer-data-filename
             website-builder-max-packages
             website-builder-output-dir
             website-builder-packages
+            website-builder-repo-base
             website-builder-report-tag
             website-builder-report-url
             website-builder-script-path
@@ -40,6 +41,9 @@
 
 (define %report-tag
   "agx-prod")
+
+(define %repo-base
+  (format #f "https://~a/builds" %domain))
 
 (define %report-url
   "https://stats.asahi-guix.org/report")
@@ -58,10 +62,10 @@
   make-website-builder
   website-builder?
   (domain website-builder-domain (default %domain))
-  (installer-data-filename website-builder-installer-data-filename (default %installer-data-filename))
   (max-packages website-builder-max-packages (default #f))
   (output-dir website-builder-output-dir (default %output-dir))
   (packages website-builder-packages (default #f))
+  (repo-base website-builder-repo-base (default %repo-base))
   (report-tag website-builder-report-tag (default %report-tag))
   (report-url website-builder-report-url (default %report-url))
   (script-path website-builder-script-path (default #f))
@@ -76,24 +80,15 @@
   (installer-data website-package-installer-data)
   (log-file website-package-log-file))
 
-(define (website-builder-installer-data-url builder)
-  (string-append "https://" (website-builder-domain builder) "/builds/"
-                 (website-builder-installer-data-filename builder)))
+(define (website-package-compare-build-time package-1 package-2)
+  (> (website-package-build-time package-1) (website-package-build-time package-2)))
 
-(define (website-builder-metadata-path builder)
-  (string-append (website-builder-output-dir builder) "/"
-                 (website-builder-installer-data-filename builder)))
+(define (website-builder-installer-data-url builder)
+  (string-append "https://" (website-builder-domain builder) "/builds/" %installer-data-filename))
 
 (define (website-builder-installer-data builder)
   (let ((packages (website-builder-packages builder)))
     (reduce merge-installer-data #f (map website-package-installer-data packages))))
-
-(define (website-package-name package)
-  (let ((data (website-package-installer-data package)))
-    (when (installer-data? data)
-      (let ((os (car (installer-data-os-list data))))
-        (when (installer-os? os)
-          (installer-os-package os))))))
 
 (define (file-extension filename)
   (let ((matches (string-match ".*\\.(.+)" (basename filename))))
@@ -146,13 +141,13 @@
                                      (lambda (e)
                                        (format #t "Warning: Invalid installer metadata ~a.\n" file)
                                        #f)
-                                   (lambda () (read-installer-data file))
+                                   (lambda ()
+                                     (installer-data-apply-package
+                                      (read-installer-data file)
+                                      (lambda (package)
+                                        (string-append (dirname file) "/" package))))
                                    #:unwind? #t))
                                files)))))
-
-(define (compare-build-time package-1 package-2)
-  (> (website-package-build-time package-1)
-     (website-package-build-time package-2)))
 
 (define (find-packages builder store)
   (let ((store-path (website-builder-store-path builder)))
@@ -168,26 +163,11 @@
                               (log-file log-file)))))
                        (filter derivation-installer-os-dir-exists?
                                (find-installer-package-derivations store-path))))
-          compare-build-time)))
+          website-package-compare-build-time)))
 
 (define (installer-os-derivation-name package)
   (let ((derivation (website-package-derivation package)))
     (string-drop-right (basename (derivation-file-name derivation)) 4)))
-
-(define (installer-os-relative-dir package)
-  (string-append "os/" (installer-os-derivation-name package)))
-
-(define (installer-os-target-dir builder package)
-  (let ((derivation (website-package-derivation package)))
-    (string-append (website-builder-output-dir builder) "/"
-                   (installer-os-relative-dir package))))
-
-(define (installer-os-target-path builder package source)
-  (string-append (installer-os-target-dir builder package) "/" (basename source)))
-
-(define (installer-os-new-package package os)
-  (string-append (installer-os-derivation-name package) "/"
-                 (installer-os-package os) ".zip"))
 
 (define (installer-os-new-name builder package os)
   (let* ((derivation (website-package-derivation package))
@@ -196,20 +176,29 @@
 
 ;; Deploy
 
+(define (deploy-metadata-source-path os)
+  (string-replace-substring (installer-os-package os) ".zip" ".json"))
+
+(define (deploy-metadata-target-path builder package)
+  (string-append "os/" (installer-os-derivation-name package) ".json"))
+
+(define (deploy-package-target-path builder package)
+  (string-append "os/" (installer-os-derivation-name package) ".zip"))
+
 (define (deploy-installer-os builder package os)
-  (let ((new-os-name (installer-os-new-name builder package os)))
-    ;; (format #t "Deploying ~a ...\n" new-os-name)
-    (let ((derivation (website-package-derivation package)))
-      (for-each (lambda (source)
-                  (let ((target (installer-os-target-path builder package source)))
-                    ;; (format #t "  ~a\n" target)
-                    (mkdir-p (dirname target))
-                    (symlink source target)))
-                (find-files (derivation-installer-os-dir derivation)))
-      (installer-os
-       (inherit os)
-       (name new-os-name)
-       (package (installer-os-new-package package os))))))
+  (with-directory-excursion (website-builder-output-dir builder)
+    (let ((new-os-name (installer-os-new-name builder package os)))
+      (let ((derivation (website-package-derivation package))
+            (package (deploy-package-target-path builder package))
+            (metadata (deploy-metadata-target-path builder package)))
+        (mkdir-p (dirname package))
+        (symlink (installer-os-package os) package)
+        (mkdir-p (dirname metadata))
+        (symlink (deploy-metadata-source-path os) metadata)
+        (installer-os
+         (inherit os)
+         (name new-os-name)
+         (package package))))))
 
 (define (deploy-package-installer-data builder package)
   (let ((data (website-package-installer-data package)))
@@ -219,21 +208,22 @@
                      (deploy-installer-os builder package os))
                    (installer-data-os-list data))))))
 
+(define (deploy-log-file-path builder package)
+  (let ((log-file (website-package-log-file package)))
+    (when (and (string? log-file) (file-exists? log-file))
+      (string-append "os/" (installer-os-derivation-name package)
+                     (string-append ".log." (file-extension log-file))))))
+
 (define (deploy-log-file builder package)
-  (if (website-package-log-file package)
-      (let* ((source (website-package-log-file package))
-             (extension (file-extension source))
-             (log-file (string-replace-substring
-                        (website-package-name package)
-                        ".zip" (string-append ".log." extension)))
-             (target (string-append
-                      (installer-os-target-dir builder package)
-                      "/" log-file)))
-        (mkdir-p (dirname target))
-        (symlink source target)
-        (string-append (installer-os-relative-dir package) "/" log-file))
-      (format #t "Warning: No log file found for ~a.\n"
-              (derivation-name (website-package-derivation package)))))
+  (with-directory-excursion (website-builder-output-dir builder)
+    (let ((log-file (website-package-log-file package)))
+      (if (and (string? log-file) (file-exists? log-file))
+          (let ((target (deploy-log-file-path builder package)))
+            (mkdir-p (dirname target))
+            (symlink log-file target)
+            target)
+          (format #t "Warning: No log file found for ~a.\n"
+                  (derivation-name (website-package-derivation package)))))))
 
 (define (deploy-package builder package)
   (website-package
@@ -242,41 +232,35 @@
    (log-file (deploy-log-file builder package))))
 
 (define (deploy-website-installer-data builder)
-  (let ((target (website-builder-metadata-path builder))
-        (data (website-builder-installer-data builder)))
-    (when (installer-data? data)
-      (mkdir-p (dirname target))
-      (write-installer-data data target))
-    builder))
+  (with-directory-excursion (website-builder-output-dir builder)
+    (let ((data (website-builder-installer-data builder)))
+      (when (installer-data? data)
+        (write-installer-data
+         (installer-data
+          (os-list (map (lambda (os)
+                          (installer-os
+                           (inherit os)
+                           (package (basename (installer-os-package os)))))
+                        (installer-data-os-list data))))
+         %installer-data-filename))
+      builder)))
 
 (define (website-builder-installer-script-target builder)
-  (string-append (website-builder-output-dir builder) "/install.sh"))
+  (string-append (website-builder-output-dir builder) "/install"))
 
 (define (deploy-website-installer-script builder)
   (let ((source (website-builder-script-path builder)))
     (when (and (string? source) (file-exists? source))
-      (let ((target (website-builder-installer-script-target builder)))
-        (mkdir-p (dirname target))
-        (copy-file source target)
-        (chmod target #o755)
-        (substitute* target
-          (("INSTALLER_DATA=.*")
-           (string-append
-            "INSTALLER_DATA="
-            (website-builder-installer-data-url builder) "\n"))
-          (("INSTALLER_DATA_ALT=.*")
-           (string-append
-            "INSTALLER_DATA_ALT="
-            (website-builder-installer-data-url builder) "\n"))
-          (("REPORT=.*")
-           (string-append
-            "REPORT="
-            (website-builder-report-url builder) "\n"))
-          (("REPORT_TAG=.*")
-           (string-append
-            "REPORT_TAG="
-            (website-builder-report-tag builder) "\n")))
-        builder))))
+      (write-installer-script
+       (installer-script
+        (inherit (read-installer-script source))
+        (installer-data (website-builder-installer-data-url builder))
+        (installer-data-alt (website-builder-installer-data-url builder))
+        (repo-base (website-builder-repo-base builder))
+        (report (website-builder-report-url builder))
+        (report-tag (website-builder-report-tag builder)))
+       (website-builder-installer-script-target builder)))
+    builder))
 
 (define (deploy-packages builder)
   (website-builder
@@ -347,7 +331,8 @@ a:active {
       (div (@ (style "font-family: 'Open Sans', sans-serif;"))
            (h1 (@ (style "font-family: 'Montserrat', sans-serif")) "Asahi Guix builds")
            (p "These are automated builds that have not been tested, use at your own risk.")
-           (p (pre (@ (style "font-size: 20px")) "curl https://www.asahi-guix.org/builds/install.sh | sh"))
+           (p (pre (@ (style "font-size: 20px"))
+                   ,(format #f "curl ~a/install | sh" (website-builder-repo-base builder))))
            ,(website-sxml-installer-list packages)))))
 
 (define (website-sxml builder)
@@ -415,4 +400,4 @@ a:active {
           (script-path (script-path-option options))
           (store-path (store-path-option options)))))))
 
-;; (define my-builder (asahi-website-builder-main '("asahi-build-website" "-s" "/gnu/store/sifb7aj7nfc55rg6id9w2divcr7gi5vp-asahi-installer-script-0.0.1/bin/asahi-guix-installer.sh")))
+;; (define my-builder (asahi-website-builder-main '("asahi-build-website" "-s" "/gnu/store/3k6gfmkwyxh7g7dpaf71c7lci4xsy6j4-asahi-installer-script-0.0.1/bin/asahi-guix-installer.sh")))
