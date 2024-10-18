@@ -36,8 +36,8 @@
                     (mkdir-p web-root)
                     (invoke "touch" (string-append web-root "/index.html"))
                     ;; Add installer bootstrap script.
-                    (copy-file (string-append installer-script "/bin/asahi-guix-installer.sh")
-                               (string-append web-root "/install.sh"))
+                    (copy-file (string-append installer-script "/bin/asahi-guix-install")
+                               (string-append web-root "/install"))
                     ;; Copy operating systems and installer data.
                     (mkdir-p os-root)
                     (define os-dirs
