@@ -278,8 +278,9 @@
 
 (define (deploy-website builder)
   (let ((output-dir (website-builder-output-dir builder)))
-    (when (directory-exists? output-dir)
-      (delete-file-recursively output-dir))
+    (when (and (directory-exists? output-dir)
+               (not (member output-dir (list "/"))))
+      (invoke "rm" "-rf" (string-append output-dir "/*")))
     (mkdir-p output-dir)
     (deploy-website-installer-script
      (deploy-website-installer-data
