@@ -105,10 +105,14 @@
                 (inherit config)
                 (authorized-keys
                  (cons* (local-file "../files/authorized-keys/apple-m1.pub")
+                        (local-file "../files/authorized-keys/substitutes.asahi-guix.org.pub")
                         (guix-configuration-authorized-keys config)))
                 (channels (cons* %asahi-maintenance-channel
                                  %asahi-channel
-                                 %default-channels))))))
+                                 %default-channels))
+                (substitute-urls
+                 (cons* "https://substitutes.asahi-guix.org"
+                        %default-substitute-urls))))))
 
 (define %swap-devices
   (list (swap-space (target "/swapfile"))))
