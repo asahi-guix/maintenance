@@ -52,9 +52,10 @@
             (ttl 86400) ;; 1 day
             (remote-server
              (cuirass-remote-server-configuration
-              (backend-port 5555)
-              (log-port 5556)
-              (publish-port 5557))))))
+              (private-key "/etc/guix/signing-key.sec")
+              (public-key "/etc/guix/signing-key.pub")
+              (publish? #f)
+              (trigger-url "http://localhost:8082"))))))
 
 (define-public %cuirass-remote-worker-service
   (service cuirass-remote-worker-service-type
