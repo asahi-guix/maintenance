@@ -7,6 +7,8 @@ Port forward Cuirass web interface to [[http://localhost:8081][localhost]].
   ssh -N -L  8081:localhost:8081 root@www.asahi-guix.org
 #+end_src
 
+** Disk Images
+- [[https://linuxconfig.org/boot-efi-linux-partition-what-is-usage-recommendations][The Linux /boot/efi partition: What is it and usage recommendations]]
 ** NREPL
 
 Start a NREPL server.
