@@ -49,18 +49,20 @@
                                   (symlink file (string-append os-root "/" (basename file))))
                                 (find-files dir)))
                     (define (merge-data sources)
-                      (let ((data (map read-installer-data sources)))
-                        (write-installer-data
-                         (reduce merge-installer-data #f data)
-                         (string-append web-root "/installer_data.json"))))
+                      (let ((data (reduce merge-installer-data #f
+                                          (map read-installer-data sources))))
+                        (when data
+                          (write-installer-data
+                           (reduce merge-installer-data #f data)
+                           (string-append web-root "/installer_data.json")))))
                     (define (find-data-files dir)
                       (find-files dir ".json"))
                     (for-each symlink-os os-dirs)
                     (merge-data (append-map find-data-files os-dirs))))))))))
     (home-page "https://www.asahi-guix.org")
     (inputs (list asahi-installer-script
-                  asahi-installer-os-base
-                  asahi-installer-os-edge
+                  ;; asahi-installer-os-base
+                  ;; asahi-installer-os-edge
                   ;; asahi-installer-os-gnome
                   ;; asahi-installer-os-plasma
                   ;; asahi-installer-os-sway
