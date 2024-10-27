@@ -2,6 +2,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (asahi guix build modules)
   #:use-module (asahi guix packages installer)
+  #:use-module (gnu packages gnupg)
   #:use-module (gnu packages guile)
   #:use-module (guix build-system copy)
   #:use-module (guix gexp)
@@ -21,7 +22,7 @@
                   (guix build utils)
                   (srfi srfi-1))
       #:phases
-      (with-extensions (list guile-json-4)
+      (with-extensions (list guile-gcrypt guile-json-4 guile-zlib)
         (with-imported-modules (source-module-closure
                                 '((asahi guix installer data))
                                 #:select? import-asahi-module?)
