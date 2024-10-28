@@ -36,7 +36,8 @@
             (host "localhost")
             (port 8081)
             (specifications %cuirass-specifications)
-            (ttl 86400) ;; 1 day
+            (ttl 14400) ;; 4 hours
+            (extra-options (list))
             (remote-server
              (cuirass-remote-server-configuration
               (private-key "/etc/guix/signing-key.sec")
