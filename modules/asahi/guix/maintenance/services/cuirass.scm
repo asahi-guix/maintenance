@@ -36,7 +36,8 @@
               (private-key "/etc/guix/signing-key.sec")
               (public-key "/etc/guix/signing-key.pub")
               (publish? #f)
-              (trigger-url "http://localhost:8082"))))))
+              ;; (trigger-url "http://localhost:8082")
+              )))))
 
 (define-public %cuirass-remote-worker-service
   (service cuirass-remote-worker-service-type
