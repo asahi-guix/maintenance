@@ -1,6 +1,7 @@
 (define-module (asahi guix maintenance services cuirass)
   #:use-module (asahi guix maintenance channels)
   #:use-module (asahi guix maintenance packages ci)
+  #:use-module (gnu services base)
   #:use-module (gnu services cuirass)
   #:use-module (gnu services)
   #:use-module (guix channels)
@@ -44,5 +45,8 @@
   (service cuirass-remote-worker-service-type
            (cuirass-remote-worker-configuration
             (cuirass cuirass-disable-jit)
+            (substitute-urls
+             (cons* "https://substitutes.asahi-guix.org"
+                    %default-substitute-urls))
             (systems '("aarch64-linux"))
             (workers 1))))
