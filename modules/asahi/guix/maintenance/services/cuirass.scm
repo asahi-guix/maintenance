@@ -33,13 +33,14 @@
             (specifications %cuirass-specifications)
             (ttl 7200) ;; 2 hours
             (extra-options (list "--derivation-ttl=7200s"))
-            (remote-server
-             (cuirass-remote-server-configuration
-              (private-key "/etc/guix/signing-key.sec")
-              (public-key "/etc/guix/signing-key.pub")
-              (publish? #f)
-              ;; (trigger-url "http://localhost:8082")
-              )))))
+            ;; (remote-server
+            ;;  (cuirass-remote-server-configuration
+            ;;   (private-key "/etc/guix/signing-key.sec")
+            ;;   (public-key "/etc/guix/signing-key.pub")
+            ;;   (publish? #f)
+            ;;   ;; (trigger-url "http://localhost:8082")
+            ;;   ))
+            )))
 
 (define-public %cuirass-remote-worker-service
   (service cuirass-remote-worker-service-type

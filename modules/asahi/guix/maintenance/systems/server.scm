@@ -86,7 +86,7 @@
   (modify-services (cons* %asahi-website-service
                           %avahi-service
                           %certbot-service
-                          %cuirass-remote-worker-service
+                          ;; %cuirass-remote-worker-service
                           %cuirass-service
                           %fail2ban-service
                           %firewall-service
