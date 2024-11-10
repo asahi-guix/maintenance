@@ -31,8 +31,8 @@
             (host "localhost")
             (port 8081)
             (specifications %cuirass-specifications)
-            (extra-options (list "--derivation-ttl=7200s"
-                                 "--ttl=3600s"))
+            (extra-options (list "--derivation-ttl=21600s"
+                                 "--ttl=14400s"))
             ;; (remote-server
             ;;  (cuirass-remote-server-configuration
             ;;   (private-key "/etc/guix/signing-key.sec")
