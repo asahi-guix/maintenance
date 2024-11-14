@@ -31,7 +31,7 @@
             (host "localhost")
             (port 8081)
             (specifications %cuirass-specifications)
-            (ttl "14400")
+            (ttl 14400)
             (extra-options (list "--derivation-ttl=21600s"))
             ;; (remote-server
             ;;  (cuirass-remote-server-configuration
