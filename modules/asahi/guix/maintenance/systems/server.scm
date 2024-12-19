@@ -105,6 +105,7 @@
                 (inherit config)
                 (authorized-keys
                  (cons* (local-file "../files/authorized-keys/apple-m1.pub")
+                        (local-file "../files/authorized-keys/precision.pub")
                         (local-file "../files/authorized-keys/substitutes.asahi-guix.org.pub")
                         (guix-configuration-authorized-keys config)))
                 (channels (cons* %asahi-maintenance-channel
