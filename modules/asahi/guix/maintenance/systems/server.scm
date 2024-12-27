@@ -69,7 +69,6 @@
          emacs-minimal
          git
          htop
-         net-tools
          screen
          %base-packages))
 
