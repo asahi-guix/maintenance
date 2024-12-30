@@ -19,6 +19,7 @@
   #:use-module (gnu packages admin)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages emacs)
+  #:use-module (gnu packages file-systems)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages screen)
   #:use-module (gnu packages terminals)
@@ -67,7 +68,8 @@
           %base-initrd-modules))
 
 (define %packages
-  (cons* e2fsprogs
+  (cons* bees
+         e2fsprogs
          emacs-minimal
          git
          htop
