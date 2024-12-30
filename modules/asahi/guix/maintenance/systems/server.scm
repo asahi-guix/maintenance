@@ -17,6 +17,7 @@
   #:use-module (gnu bootloader grub)
   #:use-module (gnu bootloader)
   #:use-module (gnu packages admin)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages screen)
@@ -71,6 +72,7 @@
          git
          htop
          screen
+         zstd
          %base-packages))
 
 (define %users
