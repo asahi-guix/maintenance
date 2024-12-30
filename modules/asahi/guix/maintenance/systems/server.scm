@@ -50,7 +50,8 @@
   (cons* (file-system
            (mount-point "/")
            (device "/dev/sda1")
-           (type "ext4")
+           (type "btrfs")
+           (options "compress=zstd")
            (needed-for-boot? #t))
          (file-system
            (mount-point "/boot/efi")
