@@ -245,6 +245,13 @@ Clone the Asahi Guix channel.
 #+end_src
 
 *** Swap File
+**** BTRFS
+
+#+begin_src
+  btrfs filesystem mkswapfile --size 32g --uuid clear /swapfile
+#+end_src
+
+**** EXT4
 
 Create the swap file.
 
