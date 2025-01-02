@@ -14,6 +14,7 @@
   #:use-module (asahi guix maintenance services virtualization)
   #:use-module (asahi guix maintenance services web)
   #:use-module (asahi guix maintenance services website)
+  #:use-module (asahi guix services stats)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu bootloader)
   #:use-module (gnu packages admin)
@@ -73,6 +74,7 @@
          emacs-minimal
          git
          htop
+         net-tools
          screen
          zstd
          %base-packages))
@@ -102,6 +104,7 @@
                           %postgresql-service
                           %qemu-service-x86-64
                           %unattended-upgrade-service
+                          (service asahi-stats-service-type)
                           (service dhcp-client-service-type)
                           %base-services)
     (guix-service-type
