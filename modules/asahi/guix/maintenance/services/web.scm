@@ -37,6 +37,16 @@
           (uri "/")
           (body '("proxy_pass http://cuirass;"))))))
       (nginx-server-configuration
+       (server-name '("stats.asahi-guix.org"))
+       (listen '("443 ssl" "[::]:443 ssl"))
+       (ssl-certificate (certbot-ssl-certificate "stats.asahi-guix.org"))
+       (ssl-certificate-key (certbot-ssl-certificate-key "stats.asahi-guix.org"))
+       (locations
+        (list
+         (nginx-location-configuration
+          (uri "/")
+          (body '("proxy_pass http://asahi-stats;"))))))
+      (nginx-server-configuration
        (server-name '("substitutes.asahi-guix.org"))
        (listen '("443 ssl" "[::]:443 ssl"))
        (ssl-certificate (certbot-ssl-certificate "substitutes.asahi-guix.org"))
@@ -48,6 +58,9 @@
           (body '("proxy_pass http://guix-publish;"))))))))
     (upstream-blocks
      (list (nginx-upstream-configuration
+            (name "asahi-stats")
+            (servers (list "127.0.0.1:8000")))
+           (nginx-upstream-configuration
             (name "cuirass")
             (servers (list "127.0.0.1:8081")))
            (nginx-upstream-configuration

@@ -22,7 +22,14 @@
                            #$(channel->code %asahi-maintenance-channel)
                            #$(channel->code %gnu-guix-channel)))
            (systems '("aarch64-linux"))
-           (priority 1))))
+           (priority 1))
+          (specification
+           (name "r0man")
+           (build '(manifests ".guix/manifest.scm"))
+           (channels (list #$(channel->code %gnu-guix-channel)
+                           #$(channel->code %r0man-home-channel)))
+           (systems '("aarch64-linux"))
+           (priority 3))))
 
 (define-public %cuirass-service
   (service cuirass-service-type

@@ -6,7 +6,7 @@
 
 (define garbage-collector-job
   ;; Collect garbage 5 minutes after every hour.
-  #~(job "5 * * * *" "guix gc -F 200G"))
+  #~(job "5 * * * *" "guix gc -F 50G"))
 
 (define %mcron-service
   (simple-service 'cron-jobs

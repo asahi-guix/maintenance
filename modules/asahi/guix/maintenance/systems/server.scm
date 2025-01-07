@@ -14,10 +14,13 @@
   #:use-module (asahi guix maintenance services virtualization)
   #:use-module (asahi guix maintenance services web)
   #:use-module (asahi guix maintenance services website)
+  #:use-module (asahi guix services stats)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu bootloader)
   #:use-module (gnu packages admin)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages emacs)
+  #:use-module (gnu packages file-systems)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages screen)
   #:use-module (gnu packages terminals)
@@ -50,7 +53,8 @@
   (cons* (file-system
            (mount-point "/")
            (device "/dev/sda1")
-           (type "ext4")
+           (type "btrfs")
+           (options "compress=zstd")
            (needed-for-boot? #t))
          (file-system
            (mount-point "/boot/efi")
@@ -65,12 +69,14 @@
           %base-initrd-modules))
 
 (define %packages
-  (cons* e2fsprogs
+  (cons* bees
+         e2fsprogs
          emacs-minimal
          git
          htop
          net-tools
          screen
+         zstd
          %base-packages))
 
 (define %users
@@ -98,6 +104,7 @@
                           %postgresql-service
                           %qemu-service-x86-64
                           %unattended-upgrade-service
+                          (service asahi-stats-service-type)
                           (service dhcp-client-service-type)
                           %base-services)
     (guix-service-type

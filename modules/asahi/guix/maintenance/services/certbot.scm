@@ -21,6 +21,11 @@
    (domains '("ci.asahi-guix.org"))
    (deploy-hook %certbot-deploy-hook)))
 
+(define-public stats-asahi-guix-org-certificate
+  (certificate-configuration
+   (domains '("stats.asahi-guix.org"))
+   (deploy-hook %certbot-deploy-hook)))
+
 (define-public substitutes-asahi-guix-org-certificate
   (certificate-configuration
    (domains '("substitutes.asahi-guix.org"))
@@ -31,4 +36,5 @@
            (certbot-configuration
             (email "roman@asahi-guix.org")
             (certificates (list ci-asahi-guix-org-certificate
+                                stats-asahi-guix-org-certificate
                                 substitutes-asahi-guix-org-certificate)))))
