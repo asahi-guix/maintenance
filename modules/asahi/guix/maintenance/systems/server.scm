@@ -4,6 +4,7 @@
   #:use-module (asahi guix maintenance services admin)
   #:use-module (asahi guix maintenance services avahi)
   #:use-module (asahi guix maintenance services base)
+  #:use-module (asahi guix maintenance services bees)
   #:use-module (asahi guix maintenance services certbot)
   #:use-module (asahi guix maintenance services cuirass)
   #:use-module (asahi guix maintenance services databases)
@@ -91,6 +92,7 @@
 (define %services
   (modify-services (cons* %asahi-website-service
                           %avahi-service
+                          %bees-service
                           %certbot-service
                           ;; %cuirass-remote-worker-service
                           %cuirass-service
