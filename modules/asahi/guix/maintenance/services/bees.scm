@@ -80,4 +80,5 @@
   (service bees-service-type
            (bees-configuration
             (roots '("4e136cfb-d433-46df-9255-f05afcd0dcfc"))
-            (verbose 5))))
+            (verbose 5)
+            (thread-factor 0.5))))
