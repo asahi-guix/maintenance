@@ -31,6 +31,11 @@
        (locations
         (list
          (nginx-location-configuration
+          (uri "~ ^/admin/forgejo/event")
+          (body (list "proxy_pass http://cuirass;"
+                      "auth_jwt \"Cuirass Webhook\";"
+                      "auth_jwt_key_file /root/jwt-keys.json;")))
+         (nginx-location-configuration
           (uri "~ ^/admin")
           (body (list "if ($ssl_client_verify != SUCCESS) { return 403; } proxy_pass http://cuirass;")))
          (nginx-location-configuration
