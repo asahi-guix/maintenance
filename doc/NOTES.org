@@ -9,6 +9,27 @@ Port forward Cuirass web interface to [[http://localhost:8081][localhost]].
 
 ** Disk Images
 - [[https://linuxconfig.org/boot-efi-linux-partition-what-is-usage-recommendations][The Linux /boot/efi partition: What is it and usage recommendations]]
+** JWT
+
+https://dzone.com/articles/authenticating-api-clients-with-jwt-and-nginx-plus
+
+#+begin_src sh :results verbatim
+  WORK=/tmp/asahi-guix/jwt
+  PLAIN_TEXT=fantasticjwt
+  JWT_HEADER=$(echo -n '{"typ":"JWT","alg":"HS256","kid":"0001"}' | base64 | tr '+\/' '-_' | tr -d '=')
+  JWT_PAYLOAD=$(echo -n '{"name":"Cuirass Webhook","sub":"asahi-guix-webhook","exp":"1577836800","iss":"Asahi Guix"}' | base64 | tr '+\/' '-_' | tr -d '=')
+  JWT_HEADER_PAYLOAD="$JWT_HEADER.$JWT_PAYLOAD"
+  JWT_SIGNATURE=$(echo -n $JWT_HEADER_PAYLOAD | openssl dgst -binary -sha256 -hmac $PLAIN_TEXT | base64 | tr '+\/' '-_' | tr -d '=')
+  JWT_CLIENT_TOKEN=$(echo $JWT_HEADER_PAYLOAD.$JWT_SIGNATURE)
+  JWT_KEYS=$(echo -n "{\"keys\":[{\"k\":\"$PLAIN_TEXT\",\"kty\":\"oct\",\"kid\":\"0001\"}]}")
+  echo $JWT_SIGNATURE
+  echo $JWT_KEYS
+#+end_src
+
+#+RESULTS:
+: 1v8c-30MkytQvmrovmOcfZvk2NHpjyBSQTyFkhwX8_s
+: {"keys":[{"k":"fantasticjwt","kty":"oct","kid":"0001"}]}
+
 ** NREPL
 
 Start a NREPL server.
