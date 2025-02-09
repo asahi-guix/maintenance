@@ -4,6 +4,7 @@
   #:use-module (gnu packages guile)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages ssh)
   #:use-module (gnu packages)
   #:use-module (guix build-system gnu)
   #:use-module (guix channels)
@@ -59,7 +60,7 @@
      ;; Use 'specification->package' to get the latest version of
      ;; the development packages.
      (append (map specification->package development-packages)
-             (list asahi-guix guile-git guile-gcrypt guile-sqlite3 pkg-config)))
+             (list asahi-guix guile-git guile-gcrypt guile-ssh guile-sqlite3 pkg-config)))
     (inputs (list guile-next guile-json-4))
     (synopsis "Asahi Guix Maintenance")
     (description "The docs, notes and code to maintain Asahi Guix.")
