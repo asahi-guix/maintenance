@@ -9,28 +9,69 @@ Port forward Cuirass web interface to [[http://localhost:8081][localhost]].
 
 ** Disk Images
 - [[https://linuxconfig.org/boot-efi-linux-partition-what-is-usage-recommendations][The Linux /boot/efi partition: What is it and usage recommendations]]
-** JWT
+** JWK
+
+https://blog.leonseng.com/posts/generate-self-signed-jwk-and-jwt/
+
+Create an RSA key pair.
+
+#+begin_src sh :results verbatim
+  mkdir -p /tmp/asahi-guix/jwk
+  openssl genrsa -out /tmp/asahi-guix/jwk/private.key 2048
+  openssl rsa -in /tmp/asahi-guix/jwk/private.key -pubout -out /tmp/asahi-guix/jwk/public.key
+#+end_src
+
+#+RESULTS:
+
+Generate JWK and store it in =/tmp/asahi-guix/jwk/key.json=.
+
+#+begin_src sh :results verbatim
+  jwker /tmp/asahi-guix/jwk/public.key | jq -S ". += {\"kid\":\"0001\"}" > /tmp/asahi-guix/jwk/key.json
+  cat /tmp/asahi-guix/jwk/key.json | jq '{"keys": [.]}' | tee /tmp/asahi-guix/jwk/keys.json
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "keys": [
+    {
+      "e": "AQAB",
+      "kid": "0001",
+      "kty": "RSA",
+      "n": "3MzaEhix6B4hYKeB08XV8J4ge3irRMjDynfB-CvYik4swY89o3UyGXSN3vu3HgKYBb_Hj0sydc-CqoRR9NbagCWuP4lLLRn4ftWMiwiDuyp8x5J8211F8p-Gbz4PFuj29fGp2h2OlgAmq7N3C9Ie1LhtIWFBhn4LCMMWs_iiaDbRi4kepBHZcG1R3zKhKe4vptrpclcah09uVOgZXxabA4fVC0RnZmhGKpJFBH8-caFMRY80-XLbbx6rVidXNB4B3QM4Y6sZY7HCnXLA8d0pP7Drah3eWC5x3lvpmquZyxafyMGe4_vhXHegFhjitJquJ1YFBp4hfrOXFvSx-e02cw"
+    }
+  ]
+}
+#+end_example
+
+** JWKS
 
 https://dzone.com/articles/authenticating-api-clients-with-jwt-and-nginx-plus
 
 #+begin_src sh :results verbatim
-  WORK=/tmp/asahi-guix/jwk
   PLAIN_TEXT="fantasticjwt"
-  JWT_HEADER=$(echo -n '{"typ":"JWT","alg":"HS256","kid":"0001"}' | base64 | tr '+\/' '-_' | tr -d '=')
-  JWT_PAYLOAD=$(echo -n '{"name":"Cuirass Webhook","sub":"asahi-guix-webhook","exp":"1577836800","iss":"Asahi Guix"}' | base64 | tr '+\/' '-_' | tr -d '=')
-  JWT_HEADER_PAYLOAD="$JWT_HEADER.$JWT_PAYLOAD"
+  mkdir -p /tmp/asahi-guix
+  PLAIN_BASE64=$(echo -n "$PLAIN_TEXT" | base64 | tr '+\/' '-_' | tr -d '=')
+  JWT_HEADER=$(echo -n '{"typ":"JWT","alg":"HS256","kid":"0001"}' | base64 -w 0 | tr '+\/' '-_' | tr -d '=')
+  JWT_PAYLOAD=$(echo -n '{"name":"Cuirass Webhook","sub":"asahi-guix-webhook","exp":"1798761600","iss":"Asahi Guix"}' | base64 -w 0 | tr '+\/' '-_' | tr -d '=')
+  JWT_HEADER_PAYLOAD="${JWT_HEADER}.${JWT_PAYLOAD}"
   JWT_SIGNATURE=$(echo -n $JWT_HEADER_PAYLOAD | openssl dgst -binary -sha256 -hmac $PLAIN_TEXT | base64 | tr '+\/' '-_' | tr -d '=')
-  JWT_CLIENT_TOKEN=$(echo $JWT_HEADER_PAYLOAD.$JWT_SIGNATURE)
-  JWT_KEYS=$(echo -n "{\"keys\":[{\"k\":\"$PLAIN_TEXT\",\"kty\":\"oct\",\"kid\":\"0001\"}]}")
-  echo $JWT_CLIENT_TOKEN
-  echo $JWT_KEYS
-  mkdir -p $WORK
-  echo $JWT_KEYS > $WORK/cuirass.jwk
+  JWT_CLIENT_TOKEN=$(echo "${JWT_HEADER_PAYLOAD}.${JWT_SIGNATURE}")
+  JWT_KEYS=$(echo -n "{\"keys\":[{\"k\":\"$PLAIN_BASE64\",\"kty\":\"oct\",\"kid\":\"0001\"}]}")
+  # ssh -i ~/.ssh/id_rsa.pub root@www.asahi-guix.org 'mkdir -p /root/.config/asahi-guix' # Why does this not work in org babel?
+  echo $JWT_KEYS | ssh root@www.asahi-guix.org 'umask 077; tee /root/.config/asahi-guix/asahi-guix-maintenance.webhook.jwks'
+  echo $JWT_CLIENT_TOKEN | tee /tmp/asahi-guix/asahi-guix-maintenance.webhook.jwkt
 #+end_src
 
 #+RESULTS:
-: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjAwMDEifQ.eyJuYW1lIjoiQ3VpcmFzcyBXZWJob29rIiwic3ViIjoiYXNhaGktZ3VpeC13ZWJob29rIiwiZXhw IjoiMTU3NzgzNjgwMCIsImlzcyI6IkFzYWhpIEd1aXgifQ.1v8c-30MkytQvmrovmOcfZvk2NHpjyBSQTyFkhwX8_s
-: {"keys":[{"k":"fantasticjwt","kty":"oct","kid":"0001"}]}
+: {"keys":[{"k":"ZmFudGFzdGljand0","kty":"oct","kid":"0001"}]}
+: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjAwMDEifQ.eyJuYW1lIjoiQ3VpcmFzcyBXZWJob29rIiwic3ViIjoiYXNhaGktZ3VpeC13ZWJob29rIiwiZXhwIjoiMTc5ODc2MTYwMCIsImlzcyI6IkFzYWhpIEd1aXgifQ.Icugg5f73KmPV2q6tAWNhNSWOXakMTiLwJGFUWus_hU
+
+#+begin_src sh :results verbatim
+  curl -s -X POST -H "Authorization: Bearer `cat /tmp/asahi-guix/asahi-guix-maintenance.webhook.jwkt`" https://ci.asahi-guix.org/admin/forgejo/event
+#+end_src
+
+#+RESULTS:
 
 ** NREPL
 
