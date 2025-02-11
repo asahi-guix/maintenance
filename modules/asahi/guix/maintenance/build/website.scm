@@ -149,21 +149,25 @@
                                    #:unwind? #t))
                                files)))))
 
+(define (take-max lst n)
+  (take lst (min n (length lst))))
+
 (define (find-packages builder store)
   (let ((store-path (website-builder-store-path builder)))
-    (sort (filter website-package?
-                  (map (lambda (derivation)
-                         (let ((log-file (log-file store (derivation-file-name derivation)))
-                               (metadata (derivation-installer-data derivation)))
-                           (when (installer-data? metadata)
-                             (website-package
-                              (build-time (derivation-build-time derivation))
-                              (derivation derivation)
-                              (installer-data metadata)
-                              (log-file log-file)))))
-                       (filter derivation-installer-os-dir-exists?
-                               (find-installer-package-derivations store-path))))
-          website-package-compare-build-time)))
+    (take-max (sort (filter website-package?
+                            (map (lambda (derivation)
+                                   (let ((log-file (log-file store (derivation-file-name derivation)))
+                                         (metadata (derivation-installer-data derivation)))
+                                     (when (installer-data? metadata)
+                                       (website-package
+                                        (build-time (derivation-build-time derivation))
+                                        (derivation derivation)
+                                        (installer-data metadata)
+                                        (log-file log-file)))))
+                                 (filter derivation-installer-os-dir-exists?
+                                         (find-installer-package-derivations store-path))))
+                    website-package-compare-build-time)
+              25)))
 
 (define (installer-os-derivation-name package)
   (let ((derivation (website-package-derivation package)))
