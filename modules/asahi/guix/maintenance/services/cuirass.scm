@@ -39,12 +39,14 @@
             (port 8081)
             (specifications %cuirass-specifications)
             (ttl 259200)
-            (remote-server
-             (cuirass-remote-server-configuration
-              (private-key "/etc/guix/signing-key.sec")
-              (public-key "/etc/guix/signing-key.pub")
-              (publish? #f)
-              (trigger-url "http://localhost:8082"))))))
+            ;; (remote-server
+            ;;  (cuirass-remote-server-configuration
+            ;;   (private-key "/etc/guix/signing-key.sec")
+            ;;   (public-key "/etc/guix/signing-key.pub")
+            ;;   (publish? #f)
+            ;;   ;; (trigger-url "http://localhost:8082")
+            ;;   ))
+            )))
 
 (define-public %cuirass-remote-worker-service
   (service cuirass-remote-worker-service-type
