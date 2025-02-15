@@ -1,1 +1,1 @@
-modules/asahi/guix/maintenance/packages/guile-xyz.scm
+.guix/asahi-guix-maintenance-package.scm
