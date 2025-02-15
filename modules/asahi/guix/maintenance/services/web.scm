@@ -1,4 +1,5 @@
 (define-module (asahi guix maintenance services web)
+  #:use-module (asahi guix maintenance packages web)
   #:use-module (asahi guix maintenance services certbot)
   #:use-module (gnu services web)
   #:use-module (gnu services)
@@ -21,6 +22,9 @@
   (service
    nginx-service-type
    (nginx-configuration
+    (modules
+     (list
+      (file-append nginx-auth-jwt-module "/etc/nginx/modules/ngx_http_auth_jwt_module.so")))
     (server-blocks
      (list
       (nginx-server-configuration
@@ -30,6 +34,13 @@
        (ssl-certificate-key (certbot-ssl-certificate-key "ci.asahi-guix.org"))
        (locations
         (list
+         (nginx-location-configuration
+          (uri "~ ^/admin/forgejo/event")
+          (body (list "proxy_pass http://cuirass;"
+                      "auth_jwt \"Cuirass Webhook\";"
+                      "auth_jwt_key_file \"/root/.config/asahi-guix/asahi-guix-maintenance.webhook.jwks\";"
+                      ;; TODO: Enable auth_jwt_validate_exp
+                      "auth_jwt_validate_exp off;")))
          (nginx-location-configuration
           (uri "~ ^/admin")
           (body (list "if ($ssl_client_verify != SUCCESS) { return 403; } proxy_pass http://cuirass;")))

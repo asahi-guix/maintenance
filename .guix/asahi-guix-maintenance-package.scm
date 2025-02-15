@@ -1,4 +1,4 @@
-(define-module (asahi guix maintenance packages guile-xyz)
+(define-module (asahi-guix-maintenance-package)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages gnupg)
   #:use-module (gnu packages guile)
